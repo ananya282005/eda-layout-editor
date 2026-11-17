@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDA Pro - Ultimate Edition</title>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <style>
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -24,36 +24,42 @@
     <script type="text/babel">
         const { useState, useEffect, useRef, useCallback } = React;
 
+        const cloneData = (value) => JSON.parse(JSON.stringify(value));
+        const createSnapshot = (layout, schematic) => ({
+            layout: cloneData(layout),
+            schematic: cloneData(schematic)
+        });
+
         // --- SVGs ---
         const SvgIcon = ({ d, size = 24, className = "", strokeWidth = 2 }) => (
             <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className}>
                 <path d={d}></path>
             </svg>
         );
-        const MousePointer2 = (p) => <SvgIcon {...p} d='<path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z"></path>' />;
-        const Square = (p) => <SvgIcon {...p} d='<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>' />;
-        const Eye = (p) => <SvgIcon {...p} d='<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle>' />;
-        const EyeOff = (p) => <SvgIcon {...p} d='<path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61 17.39 17.39"></path><path d="M3 3l18 18"></path>' />;
-        const Trash2 = (p) => <SvgIcon {...p} d='<polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line>' />;
-        const Layers = (p) => <SvgIcon {...p} d='<polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 12 12 17 22 12"></polyline><polyline points="2 17 12 22 22 17"></polyline>' />;
-        const Undo2 = (p) => <SvgIcon {...p} d='<path d="M9 14 4 9l5-5"></path><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"></path>' />;
-        const Redo2 = (p) => <SvgIcon {...p} d='<path d="m15 14 5-5-5-5"></path><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5v0A5.5 5.5 0 0 0 9.5 20H13"></path>' />;
-        const Settings2 = (p) => <SvgIcon {...p} d='<path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle>' />;
-        const Network = (p) => <SvgIcon {...p} d='<rect x="16" y="16" width="6" height="6" rx="1"></rect><rect x="2" y="16" width="6" height="6" rx="1"></rect><rect x="9" y="2" width="6" height="6" rx="1"></rect><path d="M9 8h6v10H9z"></path>' />;
-        const Move = (p) => <SvgIcon {...p} d='<polyline points="5 9 2 12 5 15"></polyline><polyline points="9 5 12 2 15 5"></polyline><polyline points="19 9 22 12 19 15"></polyline><polyline points="15 19 12 22 9 19"></polyline>' />;
-        const Play = (p) => <SvgIcon {...p} d='<polygon points="5 3 19 12 5 21 5 3"></polygon>' className="fill-current" />;
-        const SquareStop = (p) => <SvgIcon {...p} d='<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>' className="fill-current" />;
-        const Sparkles = (p) => <SvgIcon {...p} d='<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>' />;
-        const User = (p) => <SvgIcon {...p} d='<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>' />;
-        const Send = (p) => <SvgIcon {...p} d='<line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>' />;
-        const Loader2 = (p) => <SvgIcon {...p} d='<path d="M21 12a9 9 0 1 1-6.219-8.56"></path>' className="animate-spin" />;
-        const Crosshair = (p) => <SvgIcon {...p} d='<circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="18" x2="12" y2="22"></line>' />;
-        const Cpu = (p) => <SvgIcon {...p} d='<rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line>' />;
-        const Activity = (p) => <SvgIcon {...p} d='<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>' />;
+        const MousePointer2 = (p) => <SvgIcon {...p} d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z" />;
+        const Square = (p) => <SvgIcon {...p} d="M3 3h18v18H3z" />;
+        const Eye = (p) => <SvgIcon {...p} d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z M12 9a3 3 0 1 0 0 6a3 3 0 0 0 0-6Z" />;
+        const EyeOff = (p) => <SvgIcon {...p} d="M9.88 9.88a3 3 0 1 0 4.24 4.24M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68M6.61 6.61L17.39 17.39" />;
+        const Trash2 = (p) => <SvgIcon {...p} d="M3 6h18M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />;
+        const Layers = (p) => <SvgIcon {...p} d="M12 2L2 7l10 5 10-5-10-5Zm-10 5l10 5 10-5M2 12l10 5 10-5M2 17l10 5 10-5" />;
+        const Undo2 = (p) => <SvgIcon {...p} d="M9 14L4 9l5-5M4 9h10.5A5.5 5.5 0 0 1 20 14.5v0A5.5 5.5 0 0 1 14.5 20H11" />;
+        const Redo2 = (p) => <SvgIcon {...p} d="M15 14l5-5-5-5M20 9H9.5A5.5 5.5 0 0 0 4 14.5v0A5.5 5.5 0 0 0 9.5 20H13" />;
+        const Settings2 = (p) => <SvgIcon {...p} d="M20 7h-9M14 17H5M17 17a3 3 0 1 0 0-6a3 3 0 0 0 0 6ZM7 7a3 3 0 1 0 0-6a3 3 0 0 0 0 6Z" />;
+        const Network = (p) => <SvgIcon {...p} d="M16 16h6v6h-6zm-14 0h6v6H2zm7-14h6v6h-6zm0 7h6v6h-6z" />;
+        const Move = (p) => <SvgIcon {...p} d="M5 9L2 12l3 3M9 5l3-3 3 3M19 9l3 3-3 3M15 5l-3-3-3 3M9 19l3 3 3-3" />;
+        const Play = (p) => <SvgIcon {...p} d="M5 3l14 9-14 9V3z" className="fill-current" />;
+        const SquareStop = (p) => <SvgIcon {...p} d="M3 3h18v18H3z" className="fill-current" />;
+        const Sparkles = (p) => <SvgIcon {...p} d="M12 3l1.9 5.8L19.7 12l-5.8 3.2L12 21l-1.9-5.8L4.3 12l5.8-3.2L12 3z" />;
+        const User = (p) => <SvgIcon {...p} d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2M12 7a4 4 0 1 0 0-8a4 4 0 0 0 0 8z" />;
+        const Send = (p) => <SvgIcon {...p} d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />;
+        const Loader2 = (p) => <SvgIcon {...p} d="M21 12a9 9 0 1 1-6.22-8.56" className="animate-spin" />;
+        const Crosshair = (p) => <SvgIcon {...p} d="M12 2v4M12 18v4M2 12h4M18 12h4M12 12m0-7a7 7 0 1 1 0 14a7 7 0 0 1 0-14z" />;
+        const Cpu = (p) => <SvgIcon {...p} d="M4 4h16v16H4zm5 5h6v6H9zm0-8v3m6-3v3m0 14v3m-6-3v3" />;
+        const Activity = (p) => <SvgIcon {...p} d="M22 12h-4l-3 9-6-18-3 9H2" />;
 
         // --- App Configuration ---
         const VIEWS = { LAYOUT: 'LAYOUT', SCHEMATIC: 'SCHEMATIC' };
-        const GRID_SIZE = 10; 
+        const GRID_SIZE = 10;
 
         const LAYERS = [
             { id: 'nwell', name: 'N-Well', color: 'rgba(51, 65, 85, 0.4)', borderColor: '#94a3b8', zIndex: 1, hatch: true },
@@ -93,126 +99,170 @@
             { id: 'in2', name: 'B', type: 'INPUT', x: 40, y: 120, width: 40, height: 20, state: 0 },
             { id: 'and1', name: 'AND', type: 'AND', x: 140, y: 70, width: 60, height: 40 },
             { id: 'out1', name: 'LED', type: 'OUTPUT', x: 260, y: 80, width: 20, height: 20 },
-            { id: 'w1', type: 'WIRE', points: [{x: 80, y: 70}, {x: 110, y: 70}, {x: 110, y: 80}, {x: 140, y: 80}] },
-            { id: 'w2', type: 'WIRE', points: [{x: 80, y: 130}, {x: 110, y: 130}, {x: 110, y: 100}, {x: 140, y: 100}] },
-            { id: 'w3', type: 'WIRE', points: [{x: 200, y: 90}, {x: 260, y: 90}] }
+            { id: 'w1', type: 'WIRE', points: [{ x: 80, y: 70 }, { x: 110, y: 70 }, { x: 110, y: 80 }, { x: 140, y: 80 }] },
+            { id: 'w2', type: 'WIRE', points: [{ x: 80, y: 130 }, { x: 110, y: 130 }, { x: 110, y: 100 }, { x: 140, y: 100 }] },
+            { id: 'w3', type: 'WIRE', points: [{ x: 200, y: 90 }, { x: 260, y: 90 }] }
         ];
 
         function App() {
-            // Core View & Draw State
             const [view, setView] = useState(VIEWS.SCHEMATIC);
-            const [layoutElements, setLayoutElements] = useState(INITIAL_LAYOUT);
-            const [schematicElements, setSchematicElements] = useState(INITIAL_SCHEMATIC);
-            
+            const [layoutElements, setLayoutElements] = useState(() => cloneData(INITIAL_LAYOUT));
+            const [schematicElements, setSchematicElements] = useState(() => cloneData(INITIAL_SCHEMATIC));
+
             const [tool, setTool] = useState('select');
             const [activeLayerId, setActiveLayerId] = useState('metal1');
             const [activeComponentType, setActiveComponentType] = useState('AND');
-            const [visibleLayers, setVisibleLayers] = useState(LAYERS.reduce((acc, l) => ({ ...acc, [l.id]: true }), {}));
-            
+            const [visibleLayers, setVisibleLayers] = useState(() => LAYERS.reduce((acc, layer) => ({ ...acc, [layer.id]: true }), {}));
+
             const [zoom, setZoom] = useState(1);
             const [pan, setPan] = useState({ x: 0, y: 0 });
             const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-            const [selectedElementIds, setSelectedElementIds] = useState(new Set());
-            
-            // Simulator State
+            const [selectedElementIds, setSelectedElementIds] = useState(() => new Set());
+
             const [isSimulating, setIsSimulating] = useState(false);
             const [netValues, setNetValues] = useState({});
-            
-            // Panels & AI State
-            const [rightPanelTab, setRightPanelTab] = useState('inspector'); 
+
+            const [rightPanelTab, setRightPanelTab] = useState('inspector');
             const [chatHistory, setChatHistory] = useState([
                 { role: 'model', text: 'EDA Copilot initialized. I can analyze logic, run DRC checks on layouts, or generate sub-circuits.' }
             ]);
             const [chatInput, setChatInput] = useState('');
             const [isAILoading, setIsAILoading] = useState(false);
 
-            // History for Undo/Redo
-            const [history, setHistory] = useState([{ layout: INITIAL_LAYOUT, schematic: INITIAL_SCHEMATIC }]);
+            const [history, setHistory] = useState(() => [createSnapshot(INITIAL_LAYOUT, INITIAL_SCHEMATIC)]);
             const [historyStep, setHistoryStep] = useState(0);
-            
+            const historyRef = useRef(history);
+            const historyStepRef = useRef(historyStep);
+            const selectedElementIdsRef = useRef(selectedElementIds);
+
+            useEffect(() => { historyRef.current = history; }, [history]);
+            useEffect(() => { historyStepRef.current = historyStep; }, [historyStep]);
+            useEffect(() => { selectedElementIdsRef.current = selectedElementIds; }, [selectedElementIds]);
+
             const canvasRef = useRef(null);
             const containerRef = useRef(null);
             const [isDragging, setIsDragging] = useState(false);
             const [isPanning, setIsPanning] = useState(false);
             const [dragStart, setDragStart] = useState({ x: 0, y: 0, startX: 0, startY: 0 });
             const hasMoved = useRef(false);
-            const [currentElement, setCurrentElement] = useState(null); 
+            const [currentElement, setCurrentElement] = useState(null);
 
-            const getActiveElements = useCallback(() => view === VIEWS.LAYOUT ? layoutElements : schematicElements, [view, layoutElements, schematicElements]);
+            const getActiveElements = useCallback(() => (view === VIEWS.LAYOUT ? layoutElements : schematicElements), [view, layoutElements, schematicElements]);
 
             const saveToHistory = useCallback((newLayoutEls, newSchematicEls) => {
-                const newHistory = history.slice(0, historyStep + 1);
-                newHistory.push({
-                    layout: newLayoutEls !== undefined ? newLayoutEls : layoutElements,
-                    schematic: newSchematicEls !== undefined ? newSchematicEls : schematicElements
+                const snapshot = createSnapshot(
+                    newLayoutEls !== undefined ? newLayoutEls : layoutElements,
+                    newSchematicEls !== undefined ? newSchematicEls : schematicElements
+                );
+
+                setHistory(prev => {
+                    const base = prev.slice(0, historyStepRef.current + 1);
+                    const next = [...base, snapshot];
+                    historyRef.current = next;
+                    return next;
                 });
-                setHistory(newHistory); setHistoryStep(newHistory.length - 1);
-            }, [history, historyStep, layoutElements, schematicElements]);
+
+                const nextHistoryStep = historyStepRef.current + 1;
+                historyStepRef.current = nextHistoryStep;
+                setHistoryStep(nextHistoryStep);
+            }, [layoutElements, schematicElements]);
 
             const handleUndo = useCallback(() => {
-                if (historyStep > 0) {
-                    const prevStep = historyStep - 1; setHistoryStep(prevStep);
-                    setLayoutElements(history[prevStep].layout); setSchematicElements(history[prevStep].schematic);
-                    setSelectedElementIds(new Set());
-                }
-            }, [history, historyStep]);
+                if (historyStepRef.current <= 0) return;
+                const prevStep = historyStepRef.current - 1;
+                const prevSnapshot = historyRef.current[prevStep];
+
+                if (!prevSnapshot) return;
+                historyStepRef.current = prevStep;
+                setHistoryStep(prevStep);
+                setLayoutElements(cloneData(prevSnapshot.layout));
+                setSchematicElements(cloneData(prevSnapshot.schematic));
+                setSelectedElementIds(new Set());
+            }, []);
 
             const handleRedo = useCallback(() => {
-                if (historyStep < history.length - 1) {
-                    const nextStep = historyStep + 1; setHistoryStep(nextStep);
-                    setLayoutElements(history[nextStep].layout); setSchematicElements(history[nextStep].schematic);
-                    setSelectedElementIds(new Set());
-                }
-            }, [history, historyStep]);
+                if (historyStepRef.current >= historyRef.current.length - 1) return;
+                const nextStep = historyStepRef.current + 1;
+                const nextSnapshot = historyRef.current[nextStep];
+
+                if (!nextSnapshot) return;
+                historyStepRef.current = nextStep;
+                setHistoryStep(nextStep);
+                setLayoutElements(cloneData(nextSnapshot.layout));
+                setSchematicElements(cloneData(nextSnapshot.schematic));
+                setSelectedElementIds(new Set());
+            }, []);
 
             const handleDeleteSelection = useCallback(() => {
-                if (selectedElementIds.size === 0) return;
-                if (view === VIEWS.LAYOUT) {
-                    const newElements = layoutElements.filter(el => !selectedElementIds.has(el.id));
-                    setLayoutElements(newElements); saveToHistory(newElements, undefined);
-                } else {
-                    const newElements = schematicElements.filter(el => !selectedElementIds.has(el.id));
-                    setSchematicElements(newElements); saveToHistory(undefined, newElements);
-                }
-                setSelectedElementIds(new Set());
-            }, [view, layoutElements, schematicElements, selectedElementIds, saveToHistory]);
+                if (selectedElementIdsRef.current.size === 0) return;
+                const ids = selectedElementIdsRef.current;
 
-            // --- AI API ---
-            const callGeminiAPI = async (prompt, isStructured = false) => {
+                if (view === VIEWS.LAYOUT) {
+                    const newElements = layoutElements.filter(el => !ids.has(el.id));
+                    setLayoutElements(newElements);
+                    saveToHistory(newElements, undefined);
+                } else {
+                    const newElements = schematicElements.filter(el => !ids.has(el.id));
+                    setSchematicElements(newElements);
+                    saveToHistory(undefined, newElements);
+                }
+
+                setSelectedElementIds(new Set());
+            }, [view, layoutElements, schematicElements, saveToHistory]);
+
+            const callGeminiAPI = useCallback(async (prompt, isStructured = false) => {
                 setIsAILoading(true);
 
-                // Set this before the script runs, or replace the placeholder below with your real key.
-                // Example: window.EDA_GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY';
-                const apiKey = window.EDA_GEMINI_API_KEY || "PASTE_YOUR_GEMINI_API_KEY_HERE";
-                if (!apiKey || apiKey === "PASTE_YOUR_GEMINI_API_KEY_HERE") {
+                const proxyUrl = window.EDA_GEMINI_API_PROXY || null;
+                const apiKey = window.EDA_GEMINI_API_KEY || null;
+
+                if (!proxyUrl && !apiKey) {
                     setIsAILoading(false);
-                    return isStructured ? "[]" : "AI is disabled. Add your Gemini API key to window.EDA_GEMINI_API_KEY or replace the placeholder in Index.html.";
+                    return isStructured ? "[]" : "AI is disabled. Add a backend proxy via window.EDA_GEMINI_API_PROXY or keep the API key on a secure server, not in the browser.";
                 }
 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
-
-                let payload = { contents: [{ parts: [{ text: prompt }] }] };
+                const requestUrl = proxyUrl || `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+                const payload = { contents: [{ parts: [{ text: prompt }] }] };
 
                 if (isStructured) {
                     payload.generationConfig = {
-                        responseMimeType: "application/json",
+                        responseMimeType: 'application/json',
                         responseSchema: {
-                            type: "ARRAY",
+                            type: 'ARRAY',
                             items: {
-                                type: "OBJECT",
+                                type: 'OBJECT',
                                 properties: {
-                                    id: { type: "STRING" }, name: { type: "STRING" }, type: { type: "STRING" },
-                                    x: { type: "NUMBER" }, y: { type: "NUMBER" }, width: { type: "NUMBER" }, height: { type: "NUMBER" },
-                                    points: { type: "ARRAY", items: { type: "OBJECT", properties: { x: { type: "NUMBER" }, y: { type: "NUMBER" } } } }
+                                    id: { type: 'STRING' },
+                                    name: { type: 'STRING' },
+                                    type: { type: 'STRING' },
+                                    x: { type: 'NUMBER' },
+                                    y: { type: 'NUMBER' },
+                                    width: { type: 'NUMBER' },
+                                    height: { type: 'NUMBER' },
+                                    points: {
+                                        type: 'ARRAY',
+                                        items: {
+                                            type: 'OBJECT',
+                                            properties: {
+                                                x: { type: 'NUMBER' },
+                                                y: { type: 'NUMBER' }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
                     };
-                    payload.systemInstruction = { parts: [{ text: "You are an EDA generator. Output structured JSON for circuits. AND/OR: 60x40. NOT: 50x40. IO: 40x20." }] };
+                    payload.systemInstruction = { parts: [{ text: 'You are an EDA generator. Output structured JSON for circuits. AND/OR: 60x40. NOT: 50x40. IO: 40x20.' }] };
                 }
 
                 try {
-                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    const response = await fetch(requestUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
                     const data = await response.json();
                     setIsAILoading(false);
 
@@ -220,25 +270,27 @@
                         throw new Error(data?.error?.message || 'AI request failed');
                     }
 
-                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response.";
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response.';
                 } catch (error) {
-                    console.error("AI Error:", error); setIsAILoading(false);
-                    return isStructured ? "[]" : "Error connecting to AI. Check your API key and network connection.";
+                    console.error('AI Error:', error);
+                    setIsAILoading(false);
+                    return isStructured ? '[]' : 'Error connecting to AI. Check your server or network connection.';
                 }
-            };
+            }, []);
 
             const handleChatSubmit = async (e) => {
                 e.preventDefault();
                 if (!chatInput.trim() || isAILoading) return;
                 const userMsg = chatInput.trim();
-                setChatInput(''); setChatHistory(prev => [...prev, { role: 'user', text: userMsg }]);
+                setChatInput('');
+                setChatHistory(prev => [...prev, { role: 'user', text: userMsg }]);
                 const responseText = await callGeminiAPI(userMsg);
                 setChatHistory(prev => [...prev, { role: 'model', text: responseText }]);
             };
 
             const handleAnalyzeDesign = async () => {
                 const designData = JSON.stringify(view === VIEWS.LAYOUT ? layoutElements : schematicElements);
-                const mode = view === VIEWS.LAYOUT ? "Physical Layout" : "Logic Schematic";
+                const mode = view === VIEWS.LAYOUT ? 'Physical Layout' : 'Logic Schematic';
                 setChatHistory(prev => [...prev, { role: 'user', text: `Analyze my current ${view.toLowerCase()}...` }]);
                 const responseText = await callGeminiAPI(`Act as a VLSI reviewer. Analyze this JSON data for a ${mode}. Provide a short bulleted review.\nData: ${designData}`);
                 setChatHistory(prev => [...prev, { role: 'model', text: responseText }]);
@@ -246,294 +298,564 @@
 
             const handleGenerateCircuit = async () => {
                 if (view !== VIEWS.SCHEMATIC) return;
-                const prompt = chatInput.trim() || "Generate a basic logic circuit.";
-                setChatInput(''); setChatHistory(prev => [...prev, { role: 'user', text: `Generate: ${prompt}` }]);
-                
+                const prompt = chatInput.trim() || 'Generate a basic logic circuit.';
+                setChatInput('');
+                setChatHistory(prev => [...prev, { role: 'user', text: `Generate: ${prompt}` }]);
+
                 const jsonResponse = await callGeminiAPI(`Generate circuit: "${prompt}". Valid JSON array.`, true);
                 try {
                     const parsedElements = JSON.parse(jsonResponse);
                     if (Array.isArray(parsedElements) && parsedElements.length > 0) {
                         const newElements = parsedElements.map((el, i) => ({ ...el, id: `ai_${Date.now()}_${i}` }));
-                        const combined = [...schematicElements, ...newElements];
-                        setSchematicElements(combined); saveToHistory(undefined, combined);
-                        setChatHistory(prev => [...prev, { role: 'model', text: `Circuit placed on canvas!` }]);
-                    } else setChatHistory(prev => [...prev, { role: 'model', text: `Couldn't generate a valid circuit.` }]);
-                } catch (e) { setChatHistory(prev => [...prev, { role: 'model', text: `Failed to parse AI data.` }]); }
+                        setSchematicElements(prev => {
+                            const combined = [...prev, ...newElements];
+                            saveToHistory(undefined, combined);
+                            return combined;
+                        });
+                        setChatHistory(prev => [...prev, { role: 'model', text: 'Circuit placed on canvas!' }]);
+                    } else {
+                        setChatHistory(prev => [...prev, { role: 'model', text: "Couldn't generate a valid circuit." }]);
+                    }
+                } catch (error) {
+                    setChatHistory(prev => [...prev, { role: 'model', text: 'Failed to parse AI data.' }]);
+                }
             };
 
             const handleRunDRC = async () => {
                 setRightPanelTab('ai');
-                setChatHistory(prev => [...prev, { role: 'user', text: "Run Design Rule Check (DRC) on current physical layout." }]);
-                const prompt = `Act as a VLSI DRC tool. Analyze this layout JSON. List 2 potential manufacturing rule violations (like spacing or minimum width errors) based on the coordinates in a short bullet list.\nData: ${JSON.stringify(layoutElements)}`;
+                setChatHistory(prev => [...prev, { role: 'user', text: 'Run Design Rule Check (DRC) on current physical layout.' }]);
+                const prompt = `Act as a VLSI DRC tool. Analyze this layout JSON. List 2 potential manufacturing rule violations (like spacing or minimum width errors) based on the coordinates in a simple polygon layout.\nData: ${JSON.stringify(layoutElements)}`;
                 const responseText = await callGeminiAPI(prompt);
                 setChatHistory(prev => [...prev, { role: 'model', text: responseText }]);
             };
 
             const selectedElement = selectedElementIds.size === 1 ? getActiveElements().find(el => el.id === Array.from(selectedElementIds)[0]) : null;
 
-            const updateSelectedElement = (updates) => {
+            const updateSelectedElement = useCallback((updates) => {
                 if (!selectedElement) return;
                 const processedUpdates = { ...updates };
-                ['x', 'y', 'width', 'height'].forEach(key => {
+
+                ['x', 'y', 'width', 'height'].forEach((key) => {
                     if (processedUpdates[key] !== undefined) {
-                        const val = parseFloat(processedUpdates[key]); if (!isNaN(val)) processedUpdates[key] = snapToGrid(val);
+                        const val = parseFloat(processedUpdates[key]);
+                        if (!Number.isNaN(val)) processedUpdates[key] = snapToGrid(val);
                     }
                 });
 
-                const mapFunc = el => el.id === selectedElement.id ? { ...el, ...processedUpdates } : el;
-                if (view === VIEWS.LAYOUT) { const n = layoutElements.map(mapFunc); setLayoutElements(n); saveToHistory(n, undefined); }
-                else { const n = schematicElements.map(mapFunc); setSchematicElements(n); saveToHistory(undefined, n); }
-            };
+                if (view === VIEWS.LAYOUT) {
+                    const next = layoutElements.map(el => (el.id === selectedElement.id ? { ...el, ...processedUpdates } : el));
+                    setLayoutElements(next);
+                    saveToHistory(next, undefined);
+                } else {
+                    const next = schematicElements.map(el => (el.id === selectedElement.id ? { ...el, ...processedUpdates } : el));
+                    setSchematicElements(next);
+                    saveToHistory(undefined, next);
+                }
+            }, [selectedElement, view, layoutElements, schematicElements, saveToHistory]);
 
-            // --- SIMULATOR LOGIC ---
             const runSimulationTick = useCallback(() => {
-                let nodes = {}; 
-                schematicElements.forEach(el => {
-                    if (el.type === 'INPUT') nodes[`${el.x + el.width},${el.y + el.height/2}`] = el.state || 0;
+                const nodes = {};
+
+                schematicElements.forEach((el) => {
+                    if (el.type === 'INPUT') {
+                        nodes[`${el.x + el.width},${el.y + el.height / 2}`] = el.state || 0;
+                    }
+
                     if (el.type === 'CLOCK') {
-                        el.state = el.state === 1 ? 0 : 1; 
-                        nodes[`${el.x + el.width},${el.y + el.height/2}`] = el.state;
+                        const clockState = el.state === 1 ? 0 : 1;
+                        nodes[`${el.x + el.width},${el.y + el.height / 2}`] = clockState;
                     }
                 });
 
-                for(let iter = 0; iter < 5; iter++) {
-                    schematicElements.filter(el => el.type === 'WIRE').forEach(wire => {
+                for (let iter = 0; iter < 5; iter++) {
+                    schematicElements.filter(el => el.type === 'WIRE').forEach((wire) => {
                         let wireHasSignal = 0;
-                        wire.points.forEach(p => { if (nodes[`${p.x},${p.y}`] === 1) wireHasSignal = 1; });
-                        if (wireHasSignal) wire.points.forEach(p => { nodes[`${p.x},${p.y}`] = 1; });
+                        wire.points.forEach((p) => {
+                            if (nodes[`${p.x},${p.y}`] === 1) wireHasSignal = 1;
+                        });
+
+                        if (wireHasSignal) {
+                            wire.points.forEach((p) => {
+                                nodes[`${p.x},${p.y}`] = 1;
+                            });
+                        }
                     });
 
-                    schematicElements.forEach(el => {
+                    schematicElements.forEach((el) => {
                         if (['AND', 'NAND', 'OR', 'NOR', 'XOR', 'XNOR', 'NOT'].includes(el.type)) {
-                            let inA = nodes[`${el.x},${el.y + 10}`] || 0;
-                            let inB = nodes[`${el.x},${el.y + 30}`] || 0;
+                            const inA = nodes[`${el.x},${el.y + 10}`] || 0;
+                            const inB = nodes[`${el.x},${el.y + 30}`] || 0;
                             let outVal = 0;
-                            
-                            if (el.type === 'NOT') { inA = nodes[`${el.x},${el.y + 20}`] || 0; outVal = inA ? 0 : 1; }
-                            else if (el.type === 'AND') outVal = (inA && inB) ? 1 : 0;
-                            else if (el.type === 'NAND') outVal = (inA && inB) ? 0 : 1;
-                            else if (el.type === 'OR') outVal = (inA || inB) ? 1 : 0;
-                            else if (el.type === 'NOR') outVal = (inA || inB) ? 0 : 1;
-                            else if (el.type === 'XOR') outVal = (inA !== inB) ? 1 : 0;
-                            else if (el.type === 'XNOR') outVal = (inA === inB) ? 1 : 0;
-                            
+
+                            if (el.type === 'NOT') {
+                                const val = nodes[`${el.x},${el.y + 20}`] || 0;
+                                outVal = val ? 0 : 1;
+                            } else if (el.type === 'AND') {
+                                outVal = (inA && inB) ? 1 : 0;
+                            } else if (el.type === 'NAND') {
+                                outVal = (inA && inB) ? 0 : 1;
+                            } else if (el.type === 'OR') {
+                                outVal = (inA || inB) ? 1 : 0;
+                            } else if (el.type === 'NOR') {
+                                outVal = (inA || inB) ? 0 : 1;
+                            } else if (el.type === 'XOR') {
+                                outVal = (inA !== inB) ? 1 : 0;
+                            } else if (el.type === 'XNOR') {
+                                outVal = (inA === inB) ? 1 : 0;
+                            }
+
                             nodes[`${el.x + el.width},${el.y + 20}`] = outVal;
                         }
                     });
                 }
+
                 setNetValues(nodes);
             }, [schematicElements]);
 
             useEffect(() => {
-                if (isSimulating) { runSimulationTick(); const interval = setInterval(runSimulationTick, 100); return () => clearInterval(interval); }
-                else setNetValues({});
+                if (!isSimulating) {
+                    setNetValues({});
+                    return undefined;
+                }
+
+                runSimulationTick();
+                const interval = setInterval(runSimulationTick, 100);
+                return () => clearInterval(interval);
             }, [isSimulating, runSimulationTick]);
 
             const snapToGrid = (val) => Math.round(val / GRID_SIZE) * GRID_SIZE;
-            const getMouseCoords = (e) => { const rect = canvasRef.current.getBoundingClientRect(); return { x: (e.clientX - rect.left - pan.x) / zoom, y: (e.clientY - rect.top - pan.y) / zoom }; };
+            const getMouseCoords = (e) => {
+                const rect = canvasRef.current.getBoundingClientRect();
+                return {
+                    x: (e.clientX - rect.left - pan.x) / zoom,
+                    y: (e.clientY - rect.top - pan.y) / zoom
+                };
+            };
             const distToSegment = (p, v, w) => {
-                const sqr = (x) => x * x; const dist2 = (v, w) => sqr(v.x - w.x) + sqr(v.y - w.y); const l2 = dist2(v, w);
+                const sqr = (x) => x * x;
+                const dist2 = (a, b) => sqr(a.x - b.x) + sqr(a.y - b.y);
+                const l2 = dist2(v, w);
                 if (l2 === 0) return Math.sqrt(dist2(p, v));
-                let t = Math.max(0, Math.min(1, ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2));
+                const t = Math.max(0, Math.min(1, ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2));
                 return Math.sqrt(dist2(p, { x: v.x + t * (w.x - v.x), y: v.y + t * (w.y - v.y) }));
             };
 
-            // --- CANVAS DRAWING ---
             const renderCanvas = useCallback(() => {
                 if (!canvasRef.current || !containerRef.current) return;
                 const ctx = canvasRef.current.getContext('2d');
-                canvasRef.current.width = containerRef.current.clientWidth; canvasRef.current.height = containerRef.current.clientHeight;
+                canvasRef.current.width = containerRef.current.clientWidth;
+                canvasRef.current.height = containerRef.current.clientHeight;
 
-                ctx.save(); ctx.translate(pan.x, pan.y); ctx.scale(zoom, zoom);
+                ctx.save();
+                ctx.translate(pan.x, pan.y);
+                ctx.scale(zoom, zoom);
 
-                // Grid
-                ctx.fillStyle = '#0a0a0c'; ctx.fillRect(-pan.x/zoom, -pan.y/zoom, canvasRef.current.width/zoom, canvasRef.current.height/zoom);
-                ctx.strokeStyle = 'rgba(255,255,255,0.04)'; ctx.lineWidth = 1 / zoom; ctx.beginPath();
-                for (let x = snapToGrid(-pan.x/zoom); x <= (canvasRef.current.width-pan.x)/zoom; x += GRID_SIZE) { ctx.moveTo(x, -pan.y/zoom); ctx.lineTo(x, (canvasRef.current.height-pan.y)/zoom); }
-                for (let y = snapToGrid(-pan.y/zoom); y <= (canvasRef.current.height-pan.y)/zoom; y += GRID_SIZE) { ctx.moveTo(-pan.x/zoom, y); ctx.lineTo((canvasRef.current.width-pan.x)/zoom, y); }
+                ctx.fillStyle = '#0a0a0c';
+                ctx.fillRect(-pan.x / zoom, -pan.y / zoom, canvasRef.current.width / zoom, canvasRef.current.height / zoom);
+                ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+                ctx.lineWidth = 1 / zoom;
+                ctx.beginPath();
+                for (let x = snapToGrid(-pan.x / zoom); x <= (canvasRef.current.width - pan.x) / zoom; x += GRID_SIZE) {
+                    ctx.moveTo(x, -pan.y / zoom);
+                    ctx.lineTo(x, (canvasRef.current.height - pan.y) / zoom);
+                }
+                for (let y = snapToGrid(-pan.y / zoom); y <= (canvasRef.current.height - pan.y) / zoom; y += GRID_SIZE) {
+                    ctx.moveTo(-pan.x / zoom, y);
+                    ctx.lineTo((canvasRef.current.width - pan.x) / zoom, y);
+                }
                 ctx.stroke();
 
                 if (view === VIEWS.LAYOUT) {
                     const sortedLayers = [...LAYERS].sort((a, b) => a.zIndex - b.zIndex);
-                    sortedLayers.forEach(layer => {
+                    sortedLayers.forEach((layer) => {
                         if (!visibleLayers[layer.id]) return;
-                        layoutElements.filter(el => el.layerId === layer.id).forEach(el => {
-                            ctx.fillStyle = layer.color; ctx.strokeStyle = layer.borderColor; ctx.lineWidth = 1 / zoom;
-                            if (selectedElementIds.has(el.id)) { ctx.shadowColor = 'white'; ctx.shadowBlur = 12 / zoom; ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2 / zoom; } else ctx.shadowBlur = 0;
-                            ctx.beginPath(); ctx.rect(el.x, el.y, el.width, el.height); ctx.fill(); ctx.stroke();
-                            
-                            if (layer.hatch) {
-                                ctx.save(); ctx.clip(); ctx.strokeStyle = `rgba(255,255,255, 0.1)`; ctx.lineWidth = 1 / zoom; ctx.beginPath();
-                                for (let i = -el.height; i < el.width + el.height; i += 10/zoom) { ctx.moveTo(el.x + i, el.y); ctx.lineTo(el.x + i - el.height, el.y + el.height); }
-                                ctx.stroke(); ctx.restore();
+
+                        layoutElements.filter(el => el.layerId === layer.id).forEach((el) => {
+                            ctx.fillStyle = layer.color;
+                            ctx.strokeStyle = layer.borderColor;
+                            ctx.lineWidth = 1 / zoom;
+
+                            if (selectedElementIds.has(el.id)) {
+                                ctx.shadowColor = 'white';
+                                ctx.shadowBlur = 12 / zoom;
+                                ctx.strokeStyle = '#ffffff';
+                                ctx.lineWidth = 2 / zoom;
+                            } else {
+                                ctx.shadowBlur = 0;
                             }
+
+                            ctx.beginPath();
+                            ctx.rect(el.x, el.y, el.width, el.height);
+                            ctx.fill();
+                            ctx.stroke();
+
+                            if (layer.hatch) {
+                                ctx.save();
+                                ctx.clip();
+                                ctx.strokeStyle = 'rgba(255,255,255,0.10)';
+                                ctx.lineWidth = 1 / zoom;
+                                ctx.beginPath();
+                                for (let i = -el.height; i < el.width + el.height; i += 10 / zoom) {
+                                    ctx.moveTo(el.x + i, el.y);
+                                    ctx.lineTo(el.x + i - el.height, el.y + el.height);
+                                }
+                                ctx.stroke();
+                                ctx.restore();
+                            }
+
                             if (el.height * zoom > 20 && el.width * zoom > 30) {
-                                ctx.fillStyle = '#ffffff'; ctx.font = `600 ${Math.max(10 / zoom, 4)}px Inter`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-                                ctx.shadowColor = 'rgba(0,0,0,0.8)'; ctx.shadowBlur = 4 / zoom; ctx.fillText(el.name || layer.name, el.x + el.width/2, el.y + el.height/2); ctx.shadowBlur = 0;
+                                ctx.fillStyle = '#ffffff';
+                                ctx.font = `600 ${Math.max(10 / zoom, 4)}px Inter`;
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'middle';
+                                ctx.shadowColor = 'rgba(0,0,0,0.8)';
+                                ctx.shadowBlur = 4 / zoom;
+                                ctx.fillText(el.name || layer.name, el.x + el.width / 2, el.y + el.height / 2);
+                                ctx.shadowBlur = 0;
                             }
                         });
                     });
+
                     if (tool === 'draw' && currentElement) {
-                        const l = LAYERS.find(l => l.id === activeLayerId);
-                        if (l) {
-                            ctx.fillStyle = l.color; ctx.strokeStyle = l.borderColor; ctx.lineWidth = 1.5/zoom; ctx.setLineDash([5/zoom, 5/zoom]);
-                            ctx.fillRect(currentElement.x, currentElement.y, currentElement.width, currentElement.height); ctx.strokeRect(currentElement.x, currentElement.y, currentElement.width, currentElement.height); ctx.setLineDash([]);
+                        const layer = LAYERS.find(l => l.id === activeLayerId);
+                        if (layer) {
+                            ctx.fillStyle = layer.color;
+                            ctx.strokeStyle = layer.borderColor;
+                            ctx.lineWidth = 1.5 / zoom;
+                            ctx.setLineDash([5 / zoom, 5 / zoom]);
+                            ctx.fillRect(currentElement.x, currentElement.y, currentElement.width, currentElement.height);
+                            ctx.strokeRect(currentElement.x, currentElement.y, currentElement.width, currentElement.height);
+                            ctx.setLineDash([]);
                         }
                     }
                 } else {
                     const drawNode = (px, py, isOn) => {
-                        ctx.beginPath(); ctx.arc(px, py, 3/zoom, 0, Math.PI * 2);
-                        ctx.fillStyle = isOn ? '#4ade80' : '#cbd5e1'; ctx.fill();
-                        ctx.strokeStyle = isOn ? '#22c55e' : '#1e293b'; ctx.lineWidth = 1/zoom; ctx.stroke();
+                        ctx.beginPath();
+                        ctx.arc(px, py, 3 / zoom, 0, Math.PI * 2);
+                        ctx.fillStyle = isOn ? '#4ade80' : '#cbd5e1';
+                        ctx.fill();
+                        ctx.strokeStyle = isOn ? '#22c55e' : '#1e293b';
+                        ctx.lineWidth = 1 / zoom;
+                        ctx.stroke();
                     };
 
-                    schematicElements.filter(el => el.type === 'WIRE').forEach(wire => {
+                    schematicElements.filter(el => el.type === 'WIRE').forEach((wire) => {
                         if (!wire.points || wire.points.length < 2) return;
-                        let isHigh = isSimulating && wire.points.some(p => netValues[`${p.x},${p.y}`] === 1);
-                        
-                        ctx.beginPath(); ctx.moveTo(wire.points[0].x, wire.points[0].y);
-                        for (let i = 1; i < wire.points.length; i++) ctx.lineTo(wire.points[i].x, wire.points[i].y);
-                        ctx.strokeStyle = isHigh ? '#4ade80' : '#34d399'; ctx.lineWidth = (isHigh ? 3 : 1.5) / zoom; ctx.lineJoin = 'miter';
-                        if (selectedElementIds.has(wire.id)) { ctx.shadowColor = '#38bdf8'; ctx.shadowBlur = 10/zoom; ctx.strokeStyle = '#38bdf8'; } else if (isHigh) { ctx.shadowColor = '#4ade80'; ctx.shadowBlur = 10/zoom; }
-                        ctx.stroke(); ctx.shadowBlur = 0; wire.points.forEach(p => drawNode(p.x, p.y, isHigh));
+                        const isHigh = isSimulating && wire.points.some(p => netValues[`${p.x},${p.y}`] === 1);
+
+                        ctx.beginPath();
+                        ctx.moveTo(wire.points[0].x, wire.points[0].y);
+                        for (let i = 1; i < wire.points.length; i++) {
+                            ctx.lineTo(wire.points[i].x, wire.points[i].y);
+                        }
+                        ctx.strokeStyle = isHigh ? '#4ade80' : '#34d399';
+                        ctx.lineWidth = (isHigh ? 3 : 1.5) / zoom;
+                        ctx.lineJoin = 'miter';
+
+                        if (selectedElementIds.has(wire.id)) {
+                            ctx.shadowColor = '#38bdf8';
+                            ctx.shadowBlur = 10 / zoom;
+                            ctx.strokeStyle = '#38bdf8';
+                        } else if (isHigh) {
+                            ctx.shadowColor = '#4ade80';
+                            ctx.shadowBlur = 8 / zoom;
+                        } else {
+                            ctx.shadowBlur = 0;
+                        }
+
+                        ctx.stroke();
+                        ctx.shadowBlur = 0;
+                        wire.points.forEach(p => drawNode(p.x, p.y, isHigh));
                     });
 
-                    schematicElements.filter(el => el.type !== 'WIRE').forEach(el => {
+                    schematicElements.filter(el => el.type !== 'WIRE').forEach((el) => {
                         const isSelected = selectedElementIds.has(el.id);
-                        ctx.save(); ctx.translate(el.x, el.y);
-                        ctx.lineWidth = 2 / zoom; ctx.strokeStyle = isSelected ? '#38bdf8' : SCHEMATIC_COMPONENTS[el.type].color;
-                        ctx.fillStyle = 'rgba(30, 41, 59, 0.9)'; if (isSelected) { ctx.shadowColor = '#38bdf8'; ctx.shadowBlur = 12 / zoom; }
+                        ctx.save();
+                        ctx.translate(el.x, el.y);
+                        ctx.lineWidth = 2 / zoom;
+                        ctx.strokeStyle = isSelected ? '#38bdf8' : SCHEMATIC_COMPONENTS[el.type].color;
+                        ctx.fillStyle = 'rgba(30, 41, 59, 0.9)';
+                        if (isSelected) {
+                            ctx.shadowColor = '#38bdf8';
+                            ctx.shadowBlur = 12 / zoom;
+                        }
 
-                        ctx.beginPath(); const outVal = netValues[`${el.x+el.width},${el.y+20}`] || 0;
+                        ctx.beginPath();
+                        const outVal = netValues[`${el.x + el.width},${el.y + 20}`] || 0;
 
                         if (el.type === 'AND' || el.type === 'NAND') {
-                            ctx.moveTo(10, 0); ctx.lineTo(el.width - 20, 0); ctx.arc(el.width - 20, 20, 20, -Math.PI/2, Math.PI/2); ctx.lineTo(10, 40); ctx.closePath(); ctx.fill(); ctx.stroke();
-                            if(el.type === 'NAND') { ctx.beginPath(); ctx.arc(el.width - 16, 20, 4, 0, Math.PI*2); ctx.fill(); ctx.stroke(); }
-                            ctx.beginPath(); ctx.moveTo(0, 10); ctx.lineTo(10, 10); ctx.moveTo(0, 30); ctx.lineTo(10, 30); ctx.moveTo(el.width, 20); ctx.lineTo(el.width - (el.type==='NAND'?12:20), 20); ctx.stroke();
+                            ctx.moveTo(10, 0);
+                            ctx.lineTo(el.width - 20, 0);
+                            ctx.arc(el.width - 20, 20, 20, -Math.PI / 2, Math.PI / 2);
+                            ctx.lineTo(10, 40);
+                            ctx.closePath();
+                            ctx.fill();
+                            ctx.stroke();
+                            if (el.type === 'NAND') {
+                                ctx.beginPath();
+                                ctx.arc(el.width - 16, 20, 4, 0, Math.PI * 2);
+                                ctx.fill();
+                                ctx.stroke();
+                            }
+                            ctx.beginPath();
+                            ctx.moveTo(0, 10); ctx.lineTo(10, 10);
+                            ctx.moveTo(0, 30); ctx.lineTo(10, 30);
+                            ctx.moveTo(el.width, 20); ctx.lineTo(el.width - (el.type === 'NAND' ? 12 : 20), 20);
+                            ctx.stroke();
                             drawNode(0, 10, false); drawNode(0, 30, false); drawNode(el.width, 20, outVal);
-                        } 
-                        else if (el.type === 'OR' || el.type === 'NOR') {
-                            ctx.moveTo(10, 0); ctx.quadraticCurveTo(el.width*0.6, 0, el.width - (el.type==='NOR'?18:10), 20); ctx.quadraticCurveTo(el.width*0.6, 40, 10, 40); ctx.quadraticCurveTo(0, 20, 10, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
-                            if(el.type === 'NOR') { ctx.beginPath(); ctx.arc(el.width - 14, 20, 4, 0, Math.PI*2); ctx.fill(); ctx.stroke(); }
-                            ctx.beginPath(); ctx.moveTo(0, 10); ctx.lineTo(14, 10); ctx.moveTo(0, 30); ctx.lineTo(14, 30); ctx.moveTo(el.width, 20); ctx.lineTo(el.width - 10, 20); ctx.stroke();
+                        } else if (el.type === 'OR' || el.type === 'NOR') {
+                            ctx.moveTo(10, 0);
+                            ctx.quadraticCurveTo(el.width * 0.6, 0, el.width - (el.type === 'NOR' ? 18 : 10), 20);
+                            ctx.quadraticCurveTo(el.width * 0.6, 40, 10, 40);
+                            ctx.quadraticCurveTo(0, 20, 10, 0);
+                            ctx.closePath();
+                            ctx.fill();
+                            ctx.stroke();
+                            if (el.type === 'NOR') {
+                                ctx.beginPath();
+                                ctx.arc(el.width - 14, 20, 4, 0, Math.PI * 2);
+                                ctx.fill();
+                                ctx.stroke();
+                            }
+                            ctx.beginPath();
+                            ctx.moveTo(0, 10); ctx.lineTo(14, 10);
+                            ctx.moveTo(0, 30); ctx.lineTo(14, 30);
+                            ctx.moveTo(el.width, 20); ctx.lineTo(el.width - 10, 20);
+                            ctx.stroke();
                             drawNode(0, 10, false); drawNode(0, 30, false); drawNode(el.width, 20, outVal);
-                        }
-                        else if (el.type === 'XOR' || el.type === 'XNOR') {
-                            ctx.moveTo(16, 0); ctx.quadraticCurveTo(el.width*0.6, 0, el.width - (el.type==='XNOR'?18:10), 20); ctx.quadraticCurveTo(el.width*0.6, 40, 16, 40); ctx.quadraticCurveTo(0, 20, 16, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
-                            ctx.beginPath(); ctx.moveTo(10, 0); ctx.quadraticCurveTo(el.width*0.3 - 2, 20, 10, 40); ctx.stroke();
-                            if(el.type === 'XNOR') { ctx.beginPath(); ctx.arc(el.width - 14, 20, 4, 0, Math.PI*2); ctx.fill(); ctx.stroke(); }
-                            ctx.beginPath(); ctx.moveTo(0, 10); ctx.lineTo(12, 10); ctx.moveTo(0, 30); ctx.lineTo(12, 30); ctx.moveTo(el.width, 20); ctx.lineTo(el.width - 10, 20); ctx.stroke();
+                        } else if (el.type === 'XOR' || el.type === 'XNOR') {
+                            ctx.moveTo(16, 0);
+                            ctx.quadraticCurveTo(el.width * 0.6, 0, el.width - (el.type === 'XNOR' ? 18 : 10), 20);
+                            ctx.quadraticCurveTo(el.width * 0.6, 40, 16, 40);
+                            ctx.quadraticCurveTo(0, 20, 16, 0);
+                            ctx.closePath();
+                            ctx.fill();
+                            ctx.stroke();
+                            ctx.beginPath();
+                            ctx.moveTo(10, 0); ctx.quadraticCurveTo(el.width * 0.3 - 2, 20, 10, 40);
+                            ctx.stroke();
+                            if (el.type === 'XNOR') {
+                                ctx.beginPath();
+                                ctx.arc(el.width - 14, 20, 4, 0, Math.PI * 2);
+                                ctx.fill();
+                                ctx.stroke();
+                            }
+                            ctx.beginPath();
+                            ctx.moveTo(0, 10); ctx.lineTo(12, 10);
+                            ctx.moveTo(0, 30); ctx.lineTo(12, 30);
+                            ctx.moveTo(el.width, 20); ctx.lineTo(el.width - 10, 20);
+                            ctx.stroke();
                             drawNode(0, 10, false); drawNode(0, 30, false); drawNode(el.width, 20, outVal);
-                        }
-                        else if (el.type === 'NOT') {
-                            ctx.moveTo(10, 5); ctx.lineTo(el.width - 16, 20); ctx.lineTo(10, 35); ctx.closePath(); ctx.fill(); ctx.stroke();
-                            ctx.beginPath(); ctx.arc(el.width - 12, 20, 4, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-                            ctx.beginPath(); ctx.moveTo(0, 20); ctx.lineTo(10, 20); ctx.moveTo(el.width, 20); ctx.lineTo(el.width - 8, 20); ctx.stroke();
+                        } else if (el.type === 'NOT') {
+                            ctx.moveTo(10, 5);
+                            ctx.lineTo(el.width - 16, 20);
+                            ctx.lineTo(10, 35);
+                            ctx.closePath();
+                            ctx.fill();
+                            ctx.stroke();
+                            ctx.beginPath();
+                            ctx.arc(el.width - 12, 20, 4, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.stroke();
+                            ctx.beginPath();
+                            ctx.moveTo(0, 20); ctx.lineTo(10, 20);
+                            ctx.moveTo(el.width, 20); ctx.lineTo(el.width - 8, 20);
+                            ctx.stroke();
                             drawNode(0, 20, false); drawNode(el.width, 20, outVal);
-                        }
-                        else if (el.type === 'INPUT') {
+                        } else if (el.type === 'INPUT') {
                             const isHigh = el.state === 1;
-                            ctx.fillStyle = isHigh ? 'rgba(56, 189, 248, 0.3)' : 'rgba(30, 41, 59, 0.9)'; ctx.strokeStyle = isHigh ? '#38bdf8' : '#64748b';
-                            ctx.fillRect(0, 0, 40, 20); ctx.strokeRect(0, 0, 40, 20);
-                            ctx.fillStyle = ctx.strokeStyle; ctx.font = `bold ${10/zoom}px Inter`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(isHigh ? "1" : "0", 20, 10);
+                            ctx.fillStyle = isHigh ? 'rgba(56, 189, 248, 0.3)' : 'rgba(30, 41, 59, 0.9)';
+                            ctx.strokeStyle = isHigh ? '#38bdf8' : '#64748b';
+                            ctx.fillRect(0, 0, 40, 20);
+                            ctx.strokeRect(0, 0, 40, 20);
+                            ctx.fillStyle = ctx.strokeStyle;
+                            ctx.font = `bold ${10 / zoom}px Inter`;
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText(isHigh ? '1' : '0', 20, 10);
                             drawNode(40, 10, isHigh);
-                        }
-                        else if (el.type === 'OUTPUT') {
-                            const isHigh = netValues[`${el.x},${el.y+10}`] === 1;
-                            ctx.beginPath(); ctx.arc(10, 10, 10, 0, Math.PI*2);
-                            if (isHigh) { ctx.fillStyle = '#4ade80'; ctx.shadowColor = '#4ade80'; ctx.shadowBlur = 15/zoom; } else { ctx.fillStyle = '#14532d'; ctx.shadowBlur = 0; }
-                            ctx.fill(); ctx.strokeStyle = isHigh ? '#22c55e' : '#064e3b'; ctx.stroke(); ctx.shadowBlur = 0;
+                        } else if (el.type === 'OUTPUT') {
+                            const isHigh = netValues[`${el.x},${el.y + 10}`] === 1;
+                            ctx.beginPath();
+                            ctx.arc(10, 10, 10, 0, Math.PI * 2);
+                            if (isHigh) {
+                                ctx.fillStyle = '#4ade80';
+                                ctx.shadowColor = '#4ade80';
+                                ctx.shadowBlur = 15 / zoom;
+                            } else {
+                                ctx.fillStyle = '#14532d';
+                                ctx.shadowBlur = 0;
+                            }
+                            ctx.fill();
+                            ctx.strokeStyle = isHigh ? '#22c55e' : '#064e3b';
+                            ctx.stroke();
+                            ctx.shadowBlur = 0;
                             drawNode(0, 10, isHigh);
-                        }
-                        else if (el.type === 'CLOCK') {
-                            ctx.fillRect(0, 0, el.width, el.height); ctx.strokeRect(0, 0, el.width, el.height);
-                            ctx.beginPath(); ctx.moveTo(8, el.height/2); ctx.lineTo(16, el.height/2); ctx.lineTo(16, 12); ctx.lineTo(24, 12); ctx.lineTo(24, el.height-12); ctx.lineTo(32, el.height-12);
-                            ctx.moveTo(32, el.height/2); ctx.lineTo(40, el.height/2); ctx.stroke();
-                            ctx.beginPath(); ctx.moveTo(el.width, el.height/2); ctx.lineTo(el.width + 10, el.height/2); ctx.stroke();
-                            drawNode(el.width + 10, el.height/2, el.state === 1);
-                        }
-                        else if (el.type === 'DISPLAY') {
-                            ctx.fillRect(0, 0, el.width, el.height); ctx.strokeRect(0, 0, el.width, el.height);
-                            ctx.save(); ctx.strokeStyle = isSelected ? '#f87171' : 'rgba(239, 68, 68, 0.2)'; ctx.lineCap = 'round'; ctx.lineWidth = 3.5 / zoom;
-                            const pX = 12, pY = 10, sW = el.width - pX*2, sH = (el.height - pY*2)/2;
-                            ctx.beginPath(); ctx.moveTo(pX+2, pY); ctx.lineTo(pX+sW-2, pY); ctx.moveTo(pX+2, pY+sH); ctx.lineTo(pX+sW-2, pY+sH); ctx.moveTo(pX+2, pY+sH*2); ctx.lineTo(pX+sW-2, pY+sH*2); ctx.stroke();
-                            ctx.beginPath(); for(let i=1; i<=4; i++) { const py = (el.height/5)*i; ctx.moveTo(0, py); ctx.lineTo(6, py); drawNode(0, py, netValues[`${el.x},${el.y+py}`]===1); } ctx.stroke();
+                        } else if (el.type === 'CLOCK') {
+                            ctx.fillRect(0, 0, el.width, el.height);
+                            ctx.strokeRect(0, 0, el.width, el.height);
+                            ctx.beginPath();
+                            ctx.moveTo(8, el.height / 2); ctx.lineTo(16, el.height / 2); ctx.lineTo(16, 12); ctx.lineTo(24, 12); ctx.lineTo(24, el.height - 12); ctx.lineTo(32, el.height - 12); ctx.lineTo(32, el.height / 2); ctx.lineTo(40, el.height / 2);
+                            ctx.stroke();
+                            ctx.beginPath();
+                            ctx.moveTo(el.width, el.height / 2); ctx.lineTo(el.width + 10, el.height / 2); ctx.stroke();
+                            drawNode(el.width + 10, el.height / 2, el.state === 1);
+                        } else if (el.type === 'DISPLAY') {
+                            ctx.fillRect(0, 0, el.width, el.height);
+                            ctx.strokeRect(0, 0, el.width, el.height);
+                            ctx.save();
+                            ctx.strokeStyle = isSelected ? '#f87171' : 'rgba(239, 68, 68, 0.2)';
+                            ctx.lineCap = 'round';
+                            ctx.lineWidth = 3.5 / zoom;
+                            const pX = 12, pY = 10, sW = el.width - pX * 2, sH = (el.height - pY * 2) / 2;
+                            ctx.beginPath();
+                            ctx.moveTo(pX + 2, pY); ctx.lineTo(pX + sW - 2, pY);
+                            ctx.moveTo(pX + 2, pY + sH); ctx.lineTo(pX + sW - 2, pY + sH);
+                            ctx.moveTo(pX + 2, pY + sH * 2); ctx.lineTo(pX + sW - 2, pY + sH * 2);
+                            ctx.stroke();
+                            ctx.beginPath();
+                            for (let i = 1; i <= 4; i++) {
+                                const py = (el.height / 5) * i;
+                                ctx.moveTo(0, py); ctx.lineTo(6, py);
+                                drawNode(0, py, netValues[`${el.x},${el.y + py}`] === 1);
+                            }
+                            ctx.restore();
                         }
 
-                        if (el.name && el.type !== 'INPUT' && el.type !== 'OUTPUT') { ctx.fillStyle = '#94a3b8'; ctx.font = `500 ${9/zoom}px Inter`; ctx.textAlign = 'center'; ctx.fillText(el.name, el.width/2, el.height/2); }
+                        if (el.name && el.type !== 'INPUT' && el.type !== 'OUTPUT') {
+                            ctx.fillStyle = '#94a3b8';
+                            ctx.font = `500 ${9 / zoom}px Inter`;
+                            ctx.textAlign = 'center';
+                            ctx.fillText(el.name, el.width / 2, el.height / 2);
+                        }
+
                         ctx.restore();
                     });
 
                     if (tool === 'wire' && currentElement) {
-                        ctx.beginPath(); ctx.moveTo(currentElement.points[0].x, currentElement.points[0].y); currentElement.points.forEach(p => ctx.lineTo(p.x, p.y)); ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2/zoom; ctx.stroke();
+                        ctx.beginPath();
+                        ctx.moveTo(currentElement.points[0].x, currentElement.points[0].y);
+                        currentElement.points.forEach(p => ctx.lineTo(p.x, p.y));
+                        ctx.strokeStyle = '#38bdf8';
+                        ctx.lineWidth = 2 / zoom;
+                        ctx.stroke();
                     }
                 }
                 ctx.restore();
             }, [view, layoutElements, schematicElements, visibleLayers, zoom, pan, selectedElementIds, currentElement, tool, activeLayerId, isSimulating, netValues]);
 
             useEffect(() => { renderCanvas(); }, [renderCanvas]);
-            useEffect(() => { window.addEventListener('resize', renderCanvas); return () => window.removeEventListener('resize', renderCanvas); }, [renderCanvas]);
+            useEffect(() => {
+                window.addEventListener('resize', renderCanvas);
+                return () => window.removeEventListener('resize', renderCanvas);
+            }, [renderCanvas]);
 
             const handleMouseDown = (e) => {
-                if (e.button === 1 || tool === 'pan' || (e.button === 0 && e.code === "Space")) { setIsPanning(true); setDragStart({ x: e.clientX - pan.x, y: e.clientY - pan.y }); return; }
-                const coords = getMouseCoords(e); const snappedX = snapToGrid(coords.x); const snappedY = snapToGrid(coords.y);
+                if (e.button === 1 || tool === 'pan' || (e.button === 0 && e.code === 'Space')) {
+                    setIsPanning(true);
+                    setDragStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
+                    return;
+                }
+
+                const coords = getMouseCoords(e);
+                const snappedX = snapToGrid(coords.x);
+                const snappedY = snapToGrid(coords.y);
 
                 if (view === VIEWS.SCHEMATIC && isSimulating) {
                     const clickedInput = schematicElements.find(el => el.type === 'INPUT' && coords.x >= el.x && coords.x <= el.x + el.width && coords.y >= el.y && coords.y <= el.y + el.height);
-                    if (clickedInput) setSchematicElements(prev => prev.map(el => el.id === clickedInput.id ? {...el, state: el.state ? 0 : 1} : el));
-                    return; 
+                    if (clickedInput) {
+                        setSchematicElements(prev => {
+                            const next = prev.map(el => el.id === clickedInput.id ? { ...el, state: Number(!el.state) } : el);
+                            saveToHistory(undefined, next);
+                            return next;
+                        });
+                    }
+                    return;
                 }
 
                 if (view === VIEWS.LAYOUT && tool === 'draw') {
-                    setIsDragging(true); setCurrentElement({ x: snappedX, y: snappedY, width: 0, height: 0, layerId: activeLayerId });
+                    setIsDragging(true);
+                    setCurrentElement({ x: snappedX, y: snappedY, width: 0, height: 0, layerId: activeLayerId });
                 } else if (view === VIEWS.SCHEMATIC && tool === 'place') {
                     const compDef = SCHEMATIC_COMPONENTS[activeComponentType];
-                    setSchematicElements(prev => [...prev, { id: `s_${Date.now()}`, name: activeComponentType, type: activeComponentType, x: snappedX, y: snappedY, width: compDef.width, height: compDef.height }]);
+                    setSchematicElements(prev => {
+                        const next = [...prev, { id: `s_${Date.now()}`, name: activeComponentType, type: activeComponentType, x: snappedX, y: snappedY, width: compDef.width, height: compDef.height }];
+                        saveToHistory(undefined, next);
+                        return next;
+                    });
                 } else if (view === VIEWS.SCHEMATIC && tool === 'wire') {
-                    setIsDragging(true); setCurrentElement({ type: 'WIRE', points: [{ x: snappedX, y: snappedY }, { x: snappedX, y: snappedY }] });
+                    setIsDragging(true);
+                    setCurrentElement({ type: 'WIRE', points: [{ x: snappedX, y: snappedY }, { x: snappedX, y: snappedY }] });
                 } else if (tool === 'select') {
-                    let clickedId = null; const els = view === VIEWS.LAYOUT ? layoutElements : schematicElements;
+                    let clickedId = null;
+                    const els = view === VIEWS.LAYOUT ? layoutElements : schematicElements;
+
                     for (let i = els.length - 1; i >= 0; i--) {
                         if (els[i].type !== 'WIRE' && coords.x >= els[i].x && coords.x <= els[i].x + els[i].width && coords.y >= els[i].y && coords.y <= els[i].y + els[i].height) {
-                            if(view === VIEWS.LAYOUT && !visibleLayers[els[i].layerId]) continue;
-                            clickedId = els[i].id; break;
+                            if (view === VIEWS.LAYOUT && !visibleLayers[els[i].layerId]) continue;
+                            clickedId = els[i].id;
+                            break;
                         }
                     }
+
                     if (!clickedId && view === VIEWS.SCHEMATIC) {
                         const tolerance = 6 / zoom;
                         for (let i = els.length - 1; i >= 0; i--) {
                             if (els[i].type !== 'WIRE') continue;
                             for (let j = 0; j < els[i].points.length - 1; j++) {
-                                if (distToSegment(coords, els[i].points[j], els[i].points[j+1]) < tolerance) { clickedId = els[i].id; break; }
+                                if (distToSegment(coords, els[i].points[j], els[i].points[j + 1]) < tolerance) {
+                                    clickedId = els[i].id;
+                                    break;
+                                }
                             }
                             if (clickedId) break;
                         }
                     }
 
-                    if (clickedId) { setSelectedElementIds(new Set([clickedId])); setIsDragging(true); setDragStart({ startX: snappedX, startY: snappedY }); } 
-                    else setSelectedElementIds(new Set());
+                    if (clickedId) {
+                        setSelectedElementIds(new Set([clickedId]));
+                        setIsDragging(true);
+                        setDragStart({ startX: snappedX, startY: snappedY });
+                    } else {
+                        setSelectedElementIds(new Set());
+                    }
                 }
             };
 
             const handleMouseMove = (e) => {
-                const coords = getMouseCoords(e); setMousePos({ x: Math.round(coords.x), y: Math.round(coords.y) });
-                if (isPanning) { setPan({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y }); return; }
+                const coords = getMouseCoords(e);
+                setMousePos({ x: Math.round(coords.x), y: Math.round(coords.y) });
+
+                if (isPanning) {
+                    setPan({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y });
+                    return;
+                }
+
                 if (!isDragging) return;
 
-                const snappedX = snapToGrid(coords.x), snappedY = snapToGrid(coords.y);
+                const snappedX = snapToGrid(coords.x);
+                const snappedY = snapToGrid(coords.y);
 
                 if (view === VIEWS.LAYOUT && tool === 'draw' && currentElement) {
                     setCurrentElement(prev => ({ ...prev, width: snappedX - prev.x, height: snappedY - prev.y }));
                 } else if (view === VIEWS.SCHEMATIC && tool === 'wire' && currentElement) {
                     const p1 = currentElement.points[0];
-                    if (Math.abs(snappedX - p1.x) > Math.abs(snappedY - p1.y)) setCurrentElement({ ...currentElement, points: [p1, {x: snappedX, y: p1.y}, {x: snappedX, y: snappedY}] });
-                    else setCurrentElement({ ...currentElement, points: [p1, {x: p1.x, y: snappedY}, {x: snappedX, y: snappedY}] });
-                } else if (tool === 'select' && selectedElementIds.size > 0 && !isSimulating) { 
-                    const dx = snappedX - dragStart.startX, dy = snappedY - dragStart.startY;
+                    if (Math.abs(snappedX - p1.x) > Math.abs(snappedY - p1.y)) {
+                        setCurrentElement({ ...currentElement, points: [p1, { x: snappedX, y: p1.y }, { x: snappedX, y: snappedY }] });
+                    } else {
+                        setCurrentElement({ ...currentElement, points: [p1, { x: p1.x, y: snappedY }, { x: snappedX, y: snappedY }] });
+                    }
+                } else if (tool === 'select' && selectedElementIds.size > 0 && !isSimulating) {
+                    const dx = snappedX - dragStart.startX;
+                    const dy = snappedY - dragStart.startY;
                     if (dx !== 0 || dy !== 0) {
                         hasMoved.current = true;
                         const mover = prev => prev.map(el => selectedElementIds.has(el.id) && el.type !== 'WIRE' ? { ...el, x: el.x + dx, y: el.y + dy } : el);
-                        if (view === VIEWS.LAYOUT) setLayoutElements(mover); else setSchematicElements(mover);
+                        if (view === VIEWS.LAYOUT) {
+                            setLayoutElements(mover);
+                        } else {
+                            setSchematicElements(mover);
+                        }
                         setDragStart({ startX: snappedX, startY: snappedY });
                     }
                 }
@@ -541,50 +863,84 @@
 
             const handleMouseUp = () => {
                 setIsPanning(false);
+
                 if (isDragging) {
                     if (view === VIEWS.LAYOUT && tool === 'draw' && currentElement) {
                         let { x, y, width, height, layerId } = currentElement;
-                        if (width < 0) { x += width; width = Math.abs(width); } if (height < 0) { y += height; height = Math.abs(height); }
+                        if (width < 0) { x += width; width = Math.abs(width); }
+                        if (height < 0) { y += height; height = Math.abs(height); }
                         if (width >= GRID_SIZE && height >= GRID_SIZE) {
                             const newElements = [...layoutElements, { id: `l_${Date.now()}`, name: layerId.toUpperCase(), x, y, width, height, layerId }];
-                            setLayoutElements(newElements); saveToHistory(newElements, undefined);
+                            setLayoutElements(newElements);
+                            saveToHistory(newElements, undefined);
                         }
                     } else if (view === VIEWS.SCHEMATIC && tool === 'wire' && currentElement) {
                         if (currentElement.points[0].x !== currentElement.points[2].x || currentElement.points[0].y !== currentElement.points[2].y) {
                             const newElements = [...schematicElements, { id: `w_${Date.now()}`, ...currentElement }];
-                            setSchematicElements(newElements); saveToHistory(undefined, newElements);
+                            setSchematicElements(newElements);
+                            saveToHistory(undefined, newElements);
                         }
                     } else if (tool === 'select' && hasMoved.current) {
-                        if (view === VIEWS.LAYOUT) saveToHistory(layoutElements, undefined); else saveToHistory(undefined, schematicElements);
+                        if (view === VIEWS.LAYOUT) {
+                            saveToHistory(layoutElements, undefined);
+                        } else {
+                            saveToHistory(undefined, schematicElements);
+                        }
                         hasMoved.current = false;
                     }
                 }
-                setIsDragging(false); if (tool !== 'place') setCurrentElement(null);
+
+                setIsDragging(false);
+                if (tool !== 'place') setCurrentElement(null);
             };
 
             const handleWheel = useCallback((e) => {
-                e.preventDefault(); 
+                e.preventDefault();
                 if (e.ctrlKey || e.metaKey) {
-                    const delta = e.deltaY > 0 ? -0.05 : 0.05; const newZoom = Math.max(0.2, Math.min(5, zoom * (1 + delta))); 
-                    const rect = canvasRef.current.getBoundingClientRect(); const mouseX = e.clientX - rect.left, mouseY = e.clientY - rect.top;
-                    setZoom(newZoom); setPan({ x: mouseX - (mouseX - pan.x) * (newZoom / zoom), y: mouseY - (mouseY - pan.y) * (newZoom / zoom) });
-                } else setPan(prev => ({ x: prev.x - e.deltaX, y: prev.y - e.deltaY }));
-            }, [zoom, pan]);
+                    const delta = e.deltaY > 0 ? -0.05 : 0.05;
+                    const newZoom = Math.max(0.2, Math.min(5, zoom * (1 + delta)));
+                    const rect = canvasRef.current.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
 
-            useEffect(() => { const canvas = containerRef.current; if (canvas) { canvas.addEventListener('wheel', handleWheel, { passive: false }); return () => canvas.removeEventListener('wheel', handleWheel); } }, [handleWheel]);
+                    setZoom(newZoom);
+                    setPan(prev => ({
+                        x: mouseX - (mouseX - prev.x) * (newZoom / zoom),
+                        y: mouseY - (mouseY - prev.y) * (newZoom / zoom)
+                    }));
+                } else {
+                    setPan(prev => ({ x: prev.x - e.deltaX, y: prev.y - e.deltaY }));
+                }
+            }, [zoom]);
+
+            useEffect(() => {
+                const canvas = containerRef.current;
+                if (!canvas) return undefined;
+                canvas.addEventListener('wheel', handleWheel, { passive: false });
+                return () => canvas.removeEventListener('wheel', handleWheel);
+            }, [handleWheel]);
 
             useEffect(() => {
                 const handleKeyDown = (e) => {
                     if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
-                    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { if (e.shiftKey) handleRedo(); else handleUndo(); return; }
-                    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y') { handleRedo(); return; }
+                    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+                        if (e.shiftKey) handleRedo();
+                        else handleUndo();
+                        return;
+                    }
+                    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y') {
+                        handleRedo();
+                        return;
+                    }
                     if (e.key === 'Delete' || e.key === 'Backspace') handleDeleteSelection();
                 };
-                window.addEventListener('keydown', handleKeyDown); return () => window.removeEventListener('keydown', handleKeyDown);
+
+                window.addEventListener('keydown', handleKeyDown);
+                return () => window.removeEventListener('keydown', handleKeyDown);
             }, [handleDeleteSelection, handleUndo, handleRedo]);
 
             const ToolButton = ({ icon: Icon, id, label }) => (
-                <button onClick={() => setTool(id)} title={label} className={`p-2.5 rounded-lg flex items-center justify-center transition-all ${tool === id ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'}`}>
+                <button onClick={() => setTool(id)} title={label} className={`p-2.5 rounded-lg flex items-center justify-center transition-all ${tool === id ? 'bg-blue-600 text-white shadow-md' : 'text-slate-300 hover:bg-slate-800'}`}>
                     <Icon size={16} />
                 </button>
             );
@@ -595,34 +951,34 @@
                         <div className="flex items-center space-x-6">
                             <h1 className="text-lg font-bold text-slate-100 flex items-center"><span className="w-6 h-6 mr-2 rounded bg-blue-600 inline-block flex items-center justify-center">⚡</span>EDA Pro</h1>
                             <div className="flex bg-slate-900 rounded p-1 border border-slate-800 shadow-inner">
-                                <button onClick={() => { setView(VIEWS.LAYOUT); setTool('select'); setSelectedElementIds(new Set()); setIsSimulating(false); }} className={`px-4 py-1 rounded text-xs font-bold transition-all ${view === VIEWS.LAYOUT ? 'bg-slate-700 text-white' : 'text-slate-400 hover:bg-slate-800'}`}>Layout</button>
-                                <button onClick={() => { setView(VIEWS.SCHEMATIC); setTool('select'); setSelectedElementIds(new Set()); }} className={`px-4 py-1 rounded text-xs font-bold transition-all ${view === VIEWS.SCHEMATIC ? 'bg-slate-700 text-white' : 'text-slate-400 hover:bg-slate-800'}`}>Schematic</button>
+                                <button onClick={() => { setView(VIEWS.LAYOUT); setTool('select'); setSelectedElementIds(new Set()); setIsSimulating(false); }} className={`px-4 py-1 rounded text-xs font-bold transition-all ${view === VIEWS.LAYOUT ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-white'}`}>Layout</button>
+                                <button onClick={() => { setView(VIEWS.SCHEMATIC); setTool('select'); setSelectedElementIds(new Set()); }} className={`px-4 py-1 rounded text-xs font-bold transition-all ${view === VIEWS.SCHEMATIC ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-white'}`}>Schematic</button>
                             </div>
                         </div>
 
                         <div className="flex items-center space-x-4">
                             {view === VIEWS.SCHEMATIC ? (
-                                <button onClick={() => { setIsSimulating(!isSimulating); setTool('select'); setSelectedElementIds(new Set()); }} className={`px-6 py-1.5 rounded-full text-xs font-bold tracking-wider flex items-center transition-all shadow-lg mr-4 ${isSimulating ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-green-500 hover:bg-green-600 text-white'}`}>
-                                    {isSimulating ? <><SquareStop size={14} className="mr-2"/> STOP SIMULATION</> : <><Play size={14} className="mr-2"/> RUN SIMULATION</>}
+                                <button onClick={() => { setIsSimulating(!isSimulating); setTool('select'); setSelectedElementIds(new Set()); }} className={`px-6 py-1.5 rounded-full text-xs font-bold tracking-wider flex items-center transition-all shadow-lg ${isSimulating ? 'bg-red-500 hover:bg-red-400 text-white' : 'bg-green-500 hover:bg-green-400 text-slate-950'}`}>
+                                    {isSimulating ? <><SquareStop size={14} className="mr-2" /> STOP SIMULATION</> : <><Play size={14} className="mr-2" /> RUN SIMULATION</>}
                                 </button>
                             ) : (
-                                <button onClick={handleRunDRC} className="px-6 py-1.5 rounded-full text-xs font-bold tracking-wider flex items-center transition-all shadow-lg mr-4 bg-orange-500 hover:bg-orange-600 text-white">
-                                    <Activity size={14} className="mr-2"/> RUN DRC CHECK
+                                <button onClick={handleRunDRC} className="px-6 py-1.5 rounded-full text-xs font-bold tracking-wider flex items-center transition-all shadow-lg mr-4 bg-orange-500 hover:bg-orange-400 text-white">
+                                    <Activity size={14} className="mr-2" /> RUN DRC CHECK
                                 </button>
                             )}
-                             
+
                             <div className="flex bg-slate-900 rounded-md p-1 border border-slate-800">
                                 <button onClick={handleUndo} disabled={historyStep === 0} className={`p-1.5 rounded transition-colors ${historyStep > 0 ? 'hover:bg-slate-700 text-slate-300' : 'text-slate-600 cursor-not-allowed'}`}><Undo2 size={14} /></button>
-                                <button onClick={handleRedo} disabled={historyStep === history.length - 1} className={`p-1.5 rounded transition-colors ${historyStep < history.length - 1 ? 'hover:bg-slate-700 text-slate-300' : 'text-slate-600 cursor-not-allowed'}`}><Redo2 size={14} /></button>
+                                <button onClick={handleRedo} disabled={historyStep >= history.length - 1} className={`p-1.5 rounded transition-colors ${historyStep < history.length - 1 ? 'hover:bg-slate-700 text-slate-300' : 'text-slate-600 cursor-not-allowed'}`}><Redo2 size={14} /></button>
                                 <div className="w-px h-4 bg-slate-700 mx-1"></div>
-                                <button onClick={handleDeleteSelection} disabled={selectedElementIds.size === 0} className={`p-1.5 rounded transition-colors ${selectedElementIds.size > 0 ? 'hover:bg-red-700/40 text-slate-300' : 'text-slate-600 cursor-not-allowed'}`}><Trash2 size={14} /></button>
+                                <button onClick={handleDeleteSelection} disabled={selectedElementIds.size === 0} className={`p-1.5 rounded transition-colors ${selectedElementIds.size > 0 ? 'hover:bg-red-500/20 text-slate-300' : 'text-slate-600 cursor-not-allowed'}`}><Trash2 size={14} /></button>
                             </div>
 
                             <div className="text-[11px] font-mono text-slate-500 bg-slate-900 px-3 py-1.5 rounded border border-slate-800 flex items-center space-x-3"><span>X: {mousePos.x}</span><span>Y: {mousePos.y}</span></div>
 
                             <div className="flex bg-slate-900 rounded-md p-1 border border-slate-800">
-                                <button onClick={() => setRightPanelTab(rightPanelTab === 'inspector' ? 'closed' : 'inspector')} className={`p-1.5 rounded transition-colors ${rightPanelTab === 'inspector' ? 'bg-slate-700 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white'}`}><Settings2 size={14} /></button>
-                                <button onClick={() => setRightPanelTab(rightPanelTab === 'ai' ? 'closed' : 'ai')} className={`p-1.5 rounded transition-colors ${rightPanelTab === 'ai' ? 'bg-purple-600 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white'}`}><Sparkles size={14} /></button>
+                                <button onClick={() => setRightPanelTab(rightPanelTab === 'inspector' ? 'closed' : 'inspector')} className={`p-1.5 rounded transition-colors ${rightPanelTab === 'inspector' ? 'bg-cyan-600 text-white' : 'text-slate-300 hover:bg-slate-700'}`}><Settings2 size={14} /></button>
+                                <button onClick={() => setRightPanelTab(rightPanelTab === 'ai' ? 'closed' : 'ai')} className={`p-1.5 rounded transition-colors ${rightPanelTab === 'ai' ? 'bg-purple-600 text-white' : 'text-slate-300 hover:bg-slate-700'}`}><Sparkles size={14} /></button>
                             </div>
                         </div>
                     </div>
@@ -633,49 +989,58 @@
                                 <ToolButton icon={MousePointer2} id="select" label="Select & Edit" />
                                 <ToolButton icon={Move} id="pan" label="Pan Canvas (Space+Drag)" />
                                 <div className="w-full h-px bg-slate-800 my-1"></div>
-                                {view === VIEWS.LAYOUT ? <ToolButton icon={Square} id="draw" label="Draw Layer Shape" /> : <button onClick={() => setTool('wire')} className={`p-2.5 rounded-lg flex items-center justify-center transition-all ${tool === 'wire' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'}`}><Network size={16}/></button>}
+                                {view === VIEWS.LAYOUT ? <ToolButton icon={Square} id="draw" label="Draw Layer Shape" /> : <button onClick={() => setTool('wire')} className={`p-2.5 rounded-lg flex items-center justify-center transition-all ${tool === 'wire' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-300 hover:bg-slate-800'}`} title="Draw Wire"><Network size={16} /></button>}
                             </div>
-                            
+
                             <div className="bg-[#0a0a0c] border border-slate-800/80 rounded-xl p-1.5 shadow-2xl flex flex-col space-y-1.5 w-32 max-h-[60vh] overflow-y-auto no-scrollbar">
                                 {view === VIEWS.LAYOUT ? LAYERS.map(layer => {
-                                    const isActive = tool === 'draw' && activeLayerId === layer.id;
                                     const isVisible = visibleLayers[layer.id];
+                                    const isActive = tool === 'draw' && activeLayerId === layer.id;
                                     return (
                                         <div key={layer.id} className="flex items-center space-x-1 group">
-                                            <button onClick={() => setVisibleLayers(prev => ({...prev, [layer.id]: !prev[layer.id]}))} className={`p-1.5 rounded transition-colors ${isVisible ? 'text-slate-300 hover:bg-slate-700' : 'text-slate-500 hover:bg-slate-700'}`}><Eye size={12} /></button>
-                                            <button onClick={() => { setActiveLayerId(layer.id); setTool('draw'); }} className={`flex-1 flex items-center px-1.5 py-1.5 rounded text-[10px] font-bold transition-all ${isActive ? 'bg-blue-600 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}`}>
+                                            <button onClick={() => setVisibleLayers(prev => ({ ...prev, [layer.id]: !prev[layer.id] }))} className={`p-1.5 rounded transition-colors ${isVisible ? 'text-slate-300 hover:bg-slate-700' : 'text-slate-500 hover:bg-slate-700'}`} title={isVisible ? 'Hide layer' : 'Show layer'}>
+                                                {isVisible ? <Eye size={12} /> : <EyeOff size={12} />}
+                                            </button>
+                                            <button onClick={() => { setActiveLayerId(layer.id); setTool('draw'); }} className={`flex-1 flex items-center px-1.5 py-1.5 rounded text-[10px] font-bold transition-all ${isActive ? 'bg-slate-700 text-white' : 'text-slate-300 hover:bg-slate-800'}`}>
                                                 <span className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: layer.borderColor }}></span>{layer.name}
                                             </button>
                                         </div>
-                                    )
-                                }) : Object.keys(SCHEMATIC_COMPONENTS).filter(k=>k!=='WIRE').map(key => {
+                                    );
+                                }) : Object.keys(SCHEMATIC_COMPONENTS).filter(key => key !== 'WIRE').map(key => {
                                     const comp = SCHEMATIC_COMPONENTS[key];
                                     const isActive = tool === 'place' && activeComponentType === key;
-                                    return <button key={key} onClick={() => { setActiveComponentType(key); setTool('place'); }} className={`h-9 px-2 rounded flex items-center text-[10px] font-bold transition-all ${isActive ? 'bg-blue-600 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}`}>
-                                        <span className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: comp.color }}></span>{comp.name}
-                                    </button>;
+                                    return (
+                                        <button key={key} onClick={() => { setActiveComponentType(key); setTool('place'); }} className={`h-9 px-2 rounded flex items-center text-[10px] font-bold transition-all ${isActive ? 'bg-slate-700 text-white' : 'text-slate-300 hover:bg-slate-800'}`}>
+                                            <span className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: comp.color }}></span>{comp.name}
+                                        </button>
+                                    );
                                 })}
                             </div>
                         </div>
 
                         {isSimulating && view === VIEWS.SCHEMATIC && (
-                            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 bg-green-900/80 border border-green-500 text-green-200 px-6 py-2 rounded-full text-sm font-semibold shadow-lg">Simulation running</div>
+                            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 bg-green-900/80 border border-green-500 text-green-200 px-6 py-2 rounded-full text-sm font-semibold shadow-lg">
+                                Simulation running
+                            </div>
                         )}
 
-                        <div ref={containerRef} className={`flex-1 relative outline-none ${tool === 'pan' || isPanning ? 'cursor-grab active:cursor-grabbing' : 'cursor-crosshair'}`} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp} onContextMenu={(e) => { e.preventDefault(); setTool('select'); setCurrentElement(null); }} tabIndex={0}>
+                        <div ref={containerRef} className={`flex-1 relative outline-none ${tool === 'pan' || isPanning ? 'cursor-grab active:cursor-grabbing' : 'cursor-crosshair'}`} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp}>
                             <canvas ref={canvasRef} className="absolute top-0 left-0" />
                             {(tool === 'draw' || tool === 'place' || tool === 'wire') && !isPanning && !isSimulating && (
-                                <div className="pointer-events-none absolute inset-0 opacity-20"><div className="absolute w-px h-full bg-blue-400" style={{left: `${mousePos.x * zoom + pan.x}px`}}></div><div className="absolute h-px w-full bg-blue-400" style={{top: `${mousePos.y * zoom + pan.y}px`}}></div></div>
+                                <div className="pointer-events-none absolute inset-0 opacity-20">
+                                    <div className="absolute w-px h-full bg-blue-400" style={{ left: `${mousePos.x * zoom + pan.x}px` }}></div>
+                                    <div className="absolute h-px w-full bg-blue-400" style={{ top: `${mousePos.y * zoom + pan.y}px` }}></div>
+                                </div>
                             )}
                         </div>
 
                         {rightPanelTab !== 'closed' && (
                             <div className="w-[340px] bg-[#0a0a0c] border-l border-slate-800/80 flex flex-col shadow-2xl z-20 transition-all duration-300 h-full">
                                 <div className="flex border-b border-slate-800/80 bg-[#050505]">
-                                    <button onClick={() => setRightPanelTab('inspector')} className={`flex-1 py-3.5 text-xs font-semibold tracking-wide flex items-center justify-center transition-colors ${rightPanelTab === 'inspector' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/80'}`}>Inspector</button>
-                                    <button onClick={() => setRightPanelTab('ai')} className={`flex-1 py-3.5 text-xs font-semibold tracking-wide flex items-center justify-center transition-colors ${rightPanelTab === 'ai' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/80'}`}>Copilot</button>
+                                    <button onClick={() => setRightPanelTab('inspector')} className={`flex-1 py-3.5 text-xs font-semibold tracking-wide flex items-center justify-center transition-colors ${rightPanelTab === 'inspector' ? 'bg-slate-800 text-slate-100' : 'text-slate-400 hover:text-white'}`}>Inspector</button>
+                                    <button onClick={() => setRightPanelTab('ai')} className={`flex-1 py-3.5 text-xs font-semibold tracking-wide flex items-center justify-center transition-colors ${rightPanelTab === 'ai' ? 'bg-slate-800 text-slate-100' : 'text-slate-400 hover:text-white'}`}>AI</button>
                                 </div>
-                                
+
                                 {rightPanelTab === 'inspector' && (
                                     <div className="flex-1 p-5 overflow-y-auto no-scrollbar">
                                         {selectedElement ? (
@@ -684,12 +1049,12 @@
                                                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-2">Identification</span>
                                                     <div className="space-y-3">
                                                         <div className="flex items-center space-x-2">
-                                                            <div className="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs text-slate-300 font-bold tracking-wider">{selectedElement.type || selectedElement.layerId || 'Element'}</div>
+                                                            <div className="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs text-slate-300 font-bold tracking-wider">{selectedElement.type}</div>
                                                             <span className="text-xs text-slate-500 font-mono">ID: {selectedElement.id}</span>
                                                         </div>
                                                         <div>
                                                             <label className="text-[11px] text-slate-400 mb-1.5 block font-medium">Element Name / Net Label</label>
-                                                            <input type="text" value={selectedElement.name || ''} onChange={(e) => updateSelectedElement({name: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-slate-200 outline-none focus:border-blue-500" />
+                                                            <input type="text" value={selectedElement.name || ''} onChange={(e) => updateSelectedElement({ name: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-1 focus:ring-blue-500" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -703,7 +1068,7 @@
                                                                     <div key={attr}>
                                                                         <label className="text-[10px] text-slate-400 mb-1 block uppercase tracking-wider">{attr}</label>
                                                                         <div className="flex bg-slate-900 border border-slate-700 rounded overflow-hidden">
-                                                                            <input type="number" value={selectedElement[attr]} onChange={(e) => updateSelectedElement({[attr]: e.target.value})} className="w-full bg-transparent px-2 py-1.5 text-xs text-slate-200 outline-none" />
+                                                                            <input type="number" value={selectedElement[attr]} onChange={(e) => updateSelectedElement({ [attr]: e.target.value })} className="w-full bg-transparent px-2 py-1.5 text-sm text-slate-100 focus:outline-none" />
                                                                         </div>
                                                                     </div>
                                                                 ))}
@@ -713,13 +1078,14 @@
                                                         {view === VIEWS.LAYOUT && (
                                                             <div>
                                                                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-3 border-b border-slate-800 pb-1.5">Layer Assignment</span>
-                                                                <select value={selectedElement.layerId} onChange={(e) => updateSelectedElement({layerId: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-slate-200 outline-none focus:border-blue-500">
-                                                                    {LAYERS.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
+                                                                <select value={selectedElement.layerId} onChange={(e) => updateSelectedElement({ layerId: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                                                                    {LAYERS.map(layer => <option key={layer.id} value={layer.id}>{layer.name}</option>)}
                                                                 </select>
                                                             </div>
                                                         )}
                                                     </>
                                                 )}
+
                                                 {selectedElement.type === 'WIRE' && (
                                                     <div>
                                                         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-3 border-b border-slate-800 pb-1.5">Net Route Details</span>
@@ -730,7 +1096,10 @@
                                         ) : (
                                             <div className="flex flex-col items-center justify-center h-full text-center text-slate-500 space-y-4 pb-20">
                                                 <div className="w-16 h-16 rounded-full bg-slate-800/50 flex items-center justify-center shadow-inner"><Crosshair size={24} className="text-slate-600" /></div>
-                                                <div><p className="text-sm font-semibold text-slate-300 mb-1 tracking-wide">No Element Selected</p><p className="text-[11px] max-w-[200px] mx-auto text-slate-500">Click an object on the canvas to inspect or edit it.</p></div>
+                                                <div>
+                                                    <p className="text-sm font-semibold text-slate-300 mb-1 tracking-wide">No Element Selected</p>
+                                                    <p className="text-[11px] max-w-[200px] mx-auto text-slate-500">Select a shape, wire, or logic block to edit its parameters.</p>
+                                                </div>
                                             </div>
                                         )}
                                     </div>
@@ -745,7 +1114,7 @@
                                                         <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm ${msg.role === 'user' ? 'bg-blue-600 text-white ml-2' : 'bg-purple-600/30 text-purple-400 mr-2'}`}>
                                                             {msg.role === 'user' ? 'U' : <Sparkles size={14} />}
                                                         </div>
-                                                        <div className={`px-3.5 py-2.5 rounded-xl text-[13px] leading-relaxed ${msg.role === 'user' ? 'bg-blue-600/10 border border-blue-500/20 text-blue-200' : 'bg-slate-900 border border-slate-700 text-slate-300'}`}>
+                                                        <div className={`px-3.5 py-2.5 rounded-xl text-[13px] leading-relaxed ${msg.role === 'user' ? 'bg-blue-600/10 border border-blue-500/20 text-blue-200' : 'bg-slate-900 border border-slate-700 text-slate-200'}`}>
                                                             {msg.text}
                                                         </div>
                                                     </div>
@@ -755,24 +1124,24 @@
                                                 <div className="flex justify-start">
                                                     <div className="flex items-start">
                                                         <div className="w-7 h-7 rounded-lg bg-purple-600/30 text-purple-400 mr-2 flex items-center justify-center"><Sparkles size={14} /></div>
-                                                        <div className="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 rounded-tl-sm flex items-center space-x-2"><Loader2 size={14} className="animate-spin" /> <span>Thinking…</span></div>
+                                                        <div className="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 rounded-tl-sm flex items-center space-x-2"><Loader2 size={14} className="animate-spin" /><span>AI is thinking...</span></div>
                                                     </div>
                                                 </div>
                                             )}
                                         </div>
-                                        
+
                                         <div className="px-4 py-3 border-t border-slate-800/80 flex space-x-2 bg-[#0a0a0c]">
-                                            <button onClick={handleAnalyzeDesign} disabled={isAILoading} className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold tracking-wide py-2 rounded-md transition-colors disabled:opacity-50">Analyze Current Design</button>
+                                            <button onClick={handleAnalyzeDesign} disabled={isAILoading} className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold tracking-widest rounded-lg py-2.5 transition-colors disabled:opacity-50">Analyze Design</button>
                                         </div>
 
                                         <div className="p-4 bg-[#0a0a0c] border-t border-slate-800/80">
                                             <form onSubmit={handleChatSubmit} className="flex flex-col space-y-3">
                                                 <div className="flex items-center space-x-2">
-                                                    <input type="text" value={chatInput} onChange={(e) => setChatInput(e.target.value)} placeholder={view === VIEWS.SCHEMATIC ? "E.g. Generate a half adder" : "Ask about your layout"} className="flex-1 bg-slate-900 border border-slate-700 rounded-md px-3 py-2 text-sm text-slate-200 placeholder-slate-500 outline-none focus:border-blue-500" />
-                                                    <button type="submit" disabled={isAILoading || !chatInput.trim()} className="p-2.5 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white rounded-md"><Send size={14} /></button>
+                                                    <input type="text" value={chatInput} onChange={(e) => setChatInput(e.target.value)} placeholder={view === VIEWS.SCHEMATIC ? 'E.g. Generate a half adder' : 'Ask about the current layout'} className="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-purple-500" />
+                                                    <button type="submit" disabled={isAILoading || !chatInput.trim()} className="p-2.5 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white rounded-lg transition-colors"><Send size={14} /></button>
                                                 </div>
                                                 {view === VIEWS.SCHEMATIC && (
-                                                    <button type="button" onClick={handleGenerateCircuit} disabled={isAILoading || !chatInput.trim()} className="w-full py-2 text-xs font-bold tracking-[0.16em] text-purple-100 bg-purple-600/90 hover:bg-purple-500 disabled:opacity-50 rounded-md transition-colors">GENERATE CIRCUIT</button>
+                                                    <button type="button" onClick={handleGenerateCircuit} disabled={isAILoading || !chatInput.trim()} className="w-full py-2 text-xs font-bold tracking-[0.2em] uppercase bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg transition-colors disabled:opacity-50">Generate Circuit</button>
                                                 )}
                                             </form>
                                         </div>
@@ -784,6 +1153,7 @@
                 </div>
             );
         }
+
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
