@@ -26,27 +26,29 @@
 
         // --- SVGs ---
         const SvgIcon = ({ d, size = 24, className = "", strokeWidth = 2 }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className} dangerouslySetInnerHTML={{ __html: d }} />
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d={d}></path>
+            </svg>
         );
         const MousePointer2 = (p) => <SvgIcon {...p} d='<path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z"></path>' />;
         const Square = (p) => <SvgIcon {...p} d='<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>' />;
         const Eye = (p) => <SvgIcon {...p} d='<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle>' />;
-        const EyeOff = (p) => <SvgIcon {...p} d='<path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path><line x1="2" y1="2" x2="22" y2="22"></line>' />;
+        const EyeOff = (p) => <SvgIcon {...p} d='<path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61 17.39 17.39"></path><path d="M3 3l18 18"></path>' />;
         const Trash2 = (p) => <SvgIcon {...p} d='<polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line>' />;
         const Layers = (p) => <SvgIcon {...p} d='<polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 12 12 17 22 12"></polyline><polyline points="2 17 12 22 22 17"></polyline>' />;
         const Undo2 = (p) => <SvgIcon {...p} d='<path d="M9 14 4 9l5-5"></path><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"></path>' />;
         const Redo2 = (p) => <SvgIcon {...p} d='<path d="m15 14 5-5-5-5"></path><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5v0A5.5 5.5 0 0 0 9.5 20H13"></path>' />;
         const Settings2 = (p) => <SvgIcon {...p} d='<path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle>' />;
-        const Network = (p) => <SvgIcon {...p} d='<rect x="16" y="16" width="6" height="6" rx="1"></rect><rect x="2" y="16" width="6" height="6" rx="1"></rect><rect x="9" y="2" width="6" height="6" rx="1"></rect><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"></path><path d="M12 12V8"></path>' />;
-        const Move = (p) => <SvgIcon {...p} d='<polyline points="5 9 2 12 5 15"></polyline><polyline points="9 5 12 2 15 5"></polyline><polyline points="19 9 22 12 19 15"></polyline><polyline points="9 19 12 22 15 19"></polyline><line x1="2" y1="12" x2="22" y2="12"></line><line x1="12" y1="2" x2="12" y2="22"></line>' />;
+        const Network = (p) => <SvgIcon {...p} d='<rect x="16" y="16" width="6" height="6" rx="1"></rect><rect x="2" y="16" width="6" height="6" rx="1"></rect><rect x="9" y="2" width="6" height="6" rx="1"></rect><path d="M9 8h6v10H9z"></path>' />;
+        const Move = (p) => <SvgIcon {...p} d='<polyline points="5 9 2 12 5 15"></polyline><polyline points="9 5 12 2 15 5"></polyline><polyline points="19 9 22 12 19 15"></polyline><polyline points="15 19 12 22 9 19"></polyline>' />;
         const Play = (p) => <SvgIcon {...p} d='<polygon points="5 3 19 12 5 21 5 3"></polygon>' className="fill-current" />;
         const SquareStop = (p) => <SvgIcon {...p} d='<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>' className="fill-current" />;
         const Sparkles = (p) => <SvgIcon {...p} d='<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>' />;
         const User = (p) => <SvgIcon {...p} d='<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>' />;
         const Send = (p) => <SvgIcon {...p} d='<line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>' />;
         const Loader2 = (p) => <SvgIcon {...p} d='<path d="M21 12a9 9 0 1 1-6.219-8.56"></path>' className="animate-spin" />;
-        const Crosshair = (p) => <SvgIcon {...p} d='<circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line>' />;
-        const Cpu = (p) => <SvgIcon {...p} d='<rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line>' />;
+        const Crosshair = (p) => <SvgIcon {...p} d='<circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="18" x2="12" y2="22"></line>' />;
+        const Cpu = (p) => <SvgIcon {...p} d='<rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line>' />;
         const Activity = (p) => <SvgIcon {...p} d='<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>' />;
 
         // --- App Configuration ---
@@ -178,8 +180,16 @@
             // --- AI API ---
             const callGeminiAPI = async (prompt, isStructured = false) => {
                 setIsAILoading(true);
-                const apiKey = ""; // Insert API Key to enable live generation
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                // Set this before the script runs, or replace the placeholder below with your real key.
+                // Example: window.EDA_GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY';
+                const apiKey = window.EDA_GEMINI_API_KEY || "PASTE_YOUR_GEMINI_API_KEY_HERE";
+                if (!apiKey || apiKey === "PASTE_YOUR_GEMINI_API_KEY_HERE") {
+                    setIsAILoading(false);
+                    return isStructured ? "[]" : "AI is disabled. Add your Gemini API key to window.EDA_GEMINI_API_KEY or replace the placeholder in Index.html.";
+                }
+
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
 
                 let payload = { contents: [{ parts: [{ text: prompt }] }] };
 
@@ -205,10 +215,15 @@
                     const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                     const data = await response.json();
                     setIsAILoading(false);
+
+                    if (!response.ok) {
+                        throw new Error(data?.error?.message || 'AI request failed');
+                    }
+
                     return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response.";
                 } catch (error) {
                     console.error("AI Error:", error); setIsAILoading(false);
-                    return isStructured ? "[]" : "Error connecting to AI (API key required).";
+                    return isStructured ? "[]" : "Error connecting to AI. Check your API key and network connection.";
                 }
             };
 
@@ -249,7 +264,7 @@
             const handleRunDRC = async () => {
                 setRightPanelTab('ai');
                 setChatHistory(prev => [...prev, { role: 'user', text: "Run Design Rule Check (DRC) on current physical layout." }]);
-                const prompt = `Act as a VLSI DRC tool. Analyze this layout JSON. List 2 potential manufacturing rule violations (like spacing or minimum width errors) based on the coordinates in a short bulleted list. Data: ${JSON.stringify(layoutElements)}`;
+                const prompt = `Act as a VLSI DRC tool. Analyze this layout JSON. List 2 potential manufacturing rule violations (like spacing or minimum width errors) based on the coordinates in a short bullet list.\nData: ${JSON.stringify(layoutElements)}`;
                 const responseText = await callGeminiAPI(prompt);
                 setChatHistory(prev => [...prev, { role: 'model', text: responseText }]);
             };
@@ -379,7 +394,7 @@
                         ctx.beginPath(); ctx.moveTo(wire.points[0].x, wire.points[0].y);
                         for (let i = 1; i < wire.points.length; i++) ctx.lineTo(wire.points[i].x, wire.points[i].y);
                         ctx.strokeStyle = isHigh ? '#4ade80' : '#34d399'; ctx.lineWidth = (isHigh ? 3 : 1.5) / zoom; ctx.lineJoin = 'miter';
-                        if (selectedElementIds.has(wire.id)) { ctx.shadowColor = '#38bdf8'; ctx.shadowBlur = 10/zoom; ctx.strokeStyle = '#38bdf8'; } else if (isHigh) { ctx.shadowColor = '#4ade80'; ctx.shadowBlur = 8/zoom; } else ctx.shadowBlur = 0;
+                        if (selectedElementIds.has(wire.id)) { ctx.shadowColor = '#38bdf8'; ctx.shadowBlur = 10/zoom; ctx.strokeStyle = '#38bdf8'; } else if (isHigh) { ctx.shadowColor = '#4ade80'; ctx.shadowBlur = 10/zoom; }
                         ctx.stroke(); ctx.shadowBlur = 0; wire.points.forEach(p => drawNode(p.x, p.y, isHigh));
                     });
 
@@ -398,13 +413,13 @@
                             drawNode(0, 10, false); drawNode(0, 30, false); drawNode(el.width, 20, outVal);
                         } 
                         else if (el.type === 'OR' || el.type === 'NOR') {
-                            ctx.moveTo(10, 0); ctx.quadraticCurveTo(el.width*0.6, 0, el.width - (el.type==='NOR'?18:10), 20); ctx.quadraticCurveTo(el.width*0.6, 40, 10, 40); ctx.quadraticCurveTo(el.width*0.3, 20, 10, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
+                            ctx.moveTo(10, 0); ctx.quadraticCurveTo(el.width*0.6, 0, el.width - (el.type==='NOR'?18:10), 20); ctx.quadraticCurveTo(el.width*0.6, 40, 10, 40); ctx.quadraticCurveTo(0, 20, 10, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
                             if(el.type === 'NOR') { ctx.beginPath(); ctx.arc(el.width - 14, 20, 4, 0, Math.PI*2); ctx.fill(); ctx.stroke(); }
                             ctx.beginPath(); ctx.moveTo(0, 10); ctx.lineTo(14, 10); ctx.moveTo(0, 30); ctx.lineTo(14, 30); ctx.moveTo(el.width, 20); ctx.lineTo(el.width - 10, 20); ctx.stroke();
                             drawNode(0, 10, false); drawNode(0, 30, false); drawNode(el.width, 20, outVal);
                         }
                         else if (el.type === 'XOR' || el.type === 'XNOR') {
-                            ctx.moveTo(16, 0); ctx.quadraticCurveTo(el.width*0.6, 0, el.width - (el.type==='XNOR'?18:10), 20); ctx.quadraticCurveTo(el.width*0.6, 40, 16, 40); ctx.quadraticCurveTo(el.width*0.3 + 4, 20, 16, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
+                            ctx.moveTo(16, 0); ctx.quadraticCurveTo(el.width*0.6, 0, el.width - (el.type==='XNOR'?18:10), 20); ctx.quadraticCurveTo(el.width*0.6, 40, 16, 40); ctx.quadraticCurveTo(0, 20, 16, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
                             ctx.beginPath(); ctx.moveTo(10, 0); ctx.quadraticCurveTo(el.width*0.3 - 2, 20, 10, 40); ctx.stroke();
                             if(el.type === 'XNOR') { ctx.beginPath(); ctx.arc(el.width - 14, 20, 4, 0, Math.PI*2); ctx.fill(); ctx.stroke(); }
                             ctx.beginPath(); ctx.moveTo(0, 10); ctx.lineTo(12, 10); ctx.moveTo(0, 30); ctx.lineTo(12, 30); ctx.moveTo(el.width, 20); ctx.lineTo(el.width - 10, 20); ctx.stroke();
@@ -432,7 +447,8 @@
                         }
                         else if (el.type === 'CLOCK') {
                             ctx.fillRect(0, 0, el.width, el.height); ctx.strokeRect(0, 0, el.width, el.height);
-                            ctx.beginPath(); ctx.moveTo(8, el.height/2); ctx.lineTo(16, el.height/2); ctx.lineTo(16, 12); ctx.lineTo(24, 12); ctx.lineTo(24, el.height-12); ctx.lineTo(32, el.height-12); ctx.lineTo(32, el.height/2); ctx.stroke();
+                            ctx.beginPath(); ctx.moveTo(8, el.height/2); ctx.lineTo(16, el.height/2); ctx.lineTo(16, 12); ctx.lineTo(24, 12); ctx.lineTo(24, el.height-12); ctx.lineTo(32, el.height-12);
+                            ctx.moveTo(32, el.height/2); ctx.lineTo(40, el.height/2); ctx.stroke();
                             ctx.beginPath(); ctx.moveTo(el.width, el.height/2); ctx.lineTo(el.width + 10, el.height/2); ctx.stroke();
                             drawNode(el.width + 10, el.height/2, el.state === 1);
                         }
@@ -440,16 +456,16 @@
                             ctx.fillRect(0, 0, el.width, el.height); ctx.strokeRect(0, 0, el.width, el.height);
                             ctx.save(); ctx.strokeStyle = isSelected ? '#f87171' : 'rgba(239, 68, 68, 0.2)'; ctx.lineCap = 'round'; ctx.lineWidth = 3.5 / zoom;
                             const pX = 12, pY = 10, sW = el.width - pX*2, sH = (el.height - pY*2)/2;
-                            ctx.beginPath(); ctx.moveTo(pX+2, pY); ctx.lineTo(pX+sW-2, pY); ctx.moveTo(pX+2, pY+sH); ctx.lineTo(pX+sW-2, pY+sH); ctx.moveTo(pX+2, pY+sH*2); ctx.lineTo(pX+sW-2, pY+sH*2); ctx.moveTo(pX, pY+2); ctx.lineTo(pX, pY+sH-2); ctx.moveTo(pX, pY+sH+2); ctx.lineTo(pX, pY+sH*2-2); ctx.moveTo(pX+sW, pY+2); ctx.lineTo(pX+sW, pY+sH-2); ctx.moveTo(pX+sW, pY+sH+2); ctx.lineTo(pX+sW, pY+sH*2-2); ctx.stroke(); ctx.restore();
+                            ctx.beginPath(); ctx.moveTo(pX+2, pY); ctx.lineTo(pX+sW-2, pY); ctx.moveTo(pX+2, pY+sH); ctx.lineTo(pX+sW-2, pY+sH); ctx.moveTo(pX+2, pY+sH*2); ctx.lineTo(pX+sW-2, pY+sH*2); ctx.stroke();
                             ctx.beginPath(); for(let i=1; i<=4; i++) { const py = (el.height/5)*i; ctx.moveTo(0, py); ctx.lineTo(6, py); drawNode(0, py, netValues[`${el.x},${el.y+py}`]===1); } ctx.stroke();
                         }
 
-                        if (el.name && el.type !== 'INPUT' && el.type !== 'OUTPUT') { ctx.fillStyle = '#94a3b8'; ctx.font = `500 ${9/zoom}px Inter`; ctx.textAlign = 'center'; ctx.fillText(el.name, el.width/2, -5/zoom); }
+                        if (el.name && el.type !== 'INPUT' && el.type !== 'OUTPUT') { ctx.fillStyle = '#94a3b8'; ctx.font = `500 ${9/zoom}px Inter`; ctx.textAlign = 'center'; ctx.fillText(el.name, el.width/2, el.height/2); }
                         ctx.restore();
                     });
 
                     if (tool === 'wire' && currentElement) {
-                        ctx.beginPath(); ctx.moveTo(currentElement.points[0].x, currentElement.points[0].y); currentElement.points.forEach(p => ctx.lineTo(p.x, p.y)); ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5/zoom; ctx.stroke();
+                        ctx.beginPath(); ctx.moveTo(currentElement.points[0].x, currentElement.points[0].y); currentElement.points.forEach(p => ctx.lineTo(p.x, p.y)); ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2/zoom; ctx.stroke();
                     }
                 }
                 ctx.restore();
@@ -472,7 +488,7 @@
                     setIsDragging(true); setCurrentElement({ x: snappedX, y: snappedY, width: 0, height: 0, layerId: activeLayerId });
                 } else if (view === VIEWS.SCHEMATIC && tool === 'place') {
                     const compDef = SCHEMATIC_COMPONENTS[activeComponentType];
-                    setSchematicElements(prev => [...prev, { id: `s_${Date.now()}`, name: activeComponentType, type: activeComponentType, x: snappedX, y: snappedY, width: compDef.width, height: compDef.height, state: 0 }]);
+                    setSchematicElements(prev => [...prev, { id: `s_${Date.now()}`, name: activeComponentType, type: activeComponentType, x: snappedX, y: snappedY, width: compDef.width, height: compDef.height }]);
                 } else if (view === VIEWS.SCHEMATIC && tool === 'wire') {
                     setIsDragging(true); setCurrentElement({ type: 'WIRE', points: [{ x: snappedX, y: snappedY }, { x: snappedX, y: snappedY }] });
                 } else if (tool === 'select') {
@@ -568,59 +584,56 @@
             }, [handleDeleteSelection, handleUndo, handleRedo]);
 
             const ToolButton = ({ icon: Icon, id, label }) => (
-                <button onClick={() => setTool(id)} title={label} className={`p-2.5 rounded-lg flex items-center justify-center transition-all ${tool === id ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'}`}><Icon size={18} /></button>
+                <button onClick={() => setTool(id)} title={label} className={`p-2.5 rounded-lg flex items-center justify-center transition-all ${tool === id ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'}`}>
+                    <Icon size={16} />
+                </button>
             );
 
             return (
                 <div className="flex flex-col h-screen bg-[#050505] text-slate-200 font-sans select-none overflow-hidden">
-                    {/* Header */}
                     <div className="flex items-center justify-between px-5 py-3 border-b border-slate-800/80 bg-[#0a0a0c] z-10 shadow-sm">
                         <div className="flex items-center space-x-6">
-                            <h1 className="text-lg font-bold text-slate-100 flex items-center"><span className="w-6 h-6 mr-2 rounded bg-blue-600 inline-block flex items-center justify-center">⚡</span> EDA Pro Master</h1>
+                            <h1 className="text-lg font-bold text-slate-100 flex items-center"><span className="w-6 h-6 mr-2 rounded bg-blue-600 inline-block flex items-center justify-center">⚡</span>EDA Pro</h1>
                             <div className="flex bg-slate-900 rounded p-1 border border-slate-800 shadow-inner">
-                                <button onClick={() => { setView(VIEWS.LAYOUT); setTool('select'); setSelectedElementIds(new Set()); setIsSimulating(false); }} className={`px-4 py-1 rounded text-xs font-bold transition-all flex items-center ${view === VIEWS.LAYOUT ? 'bg-slate-700 text-white' : 'text-slate-500 hover:text-slate-300'}`}><Layers size={14} className="mr-2"/> LAYOUT</button>
-                                <button onClick={() => { setView(VIEWS.SCHEMATIC); setTool('select'); setSelectedElementIds(new Set()); }} className={`px-4 py-1 rounded text-xs font-bold transition-all flex items-center ${view === VIEWS.SCHEMATIC ? 'bg-slate-700 text-white' : 'text-slate-500 hover:text-slate-300'}`}><Network size={14} className="mr-2"/> SCHEMATIC</button>
+                                <button onClick={() => { setView(VIEWS.LAYOUT); setTool('select'); setSelectedElementIds(new Set()); setIsSimulating(false); }} className={`px-4 py-1 rounded text-xs font-bold transition-all ${view === VIEWS.LAYOUT ? 'bg-slate-700 text-white' : 'text-slate-400 hover:bg-slate-800'}`}>Layout</button>
+                                <button onClick={() => { setView(VIEWS.SCHEMATIC); setTool('select'); setSelectedElementIds(new Set()); }} className={`px-4 py-1 rounded text-xs font-bold transition-all ${view === VIEWS.SCHEMATIC ? 'bg-slate-700 text-white' : 'text-slate-400 hover:bg-slate-800'}`}>Schematic</button>
                             </div>
                         </div>
 
                         <div className="flex items-center space-x-4">
-                            {/* NEW: RUN DRC FOR LAYOUT / RUN SIMULATION FOR SCHEMATIC */}
                             {view === VIEWS.SCHEMATIC ? (
-                                <button onClick={() => { setIsSimulating(!isSimulating); setTool('select'); setSelectedElementIds(new Set()); }}
-                                    className={`px-6 py-1.5 rounded-full text-xs font-bold tracking-wider flex items-center transition-all shadow-lg mr-4 ${isSimulating ? 'bg-red-500 hover:bg-red-600 text-white shadow-red-900/50' : 'bg-green-500 hover:bg-green-600 text-white shadow-green-900/50'}`}>
+                                <button onClick={() => { setIsSimulating(!isSimulating); setTool('select'); setSelectedElementIds(new Set()); }} className={`px-6 py-1.5 rounded-full text-xs font-bold tracking-wider flex items-center transition-all shadow-lg mr-4 ${isSimulating ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-green-500 hover:bg-green-600 text-white'}`}>
                                     {isSimulating ? <><SquareStop size={14} className="mr-2"/> STOP SIMULATION</> : <><Play size={14} className="mr-2"/> RUN SIMULATION</>}
                                 </button>
                             ) : (
-                                <button onClick={handleRunDRC}
-                                    className={`px-6 py-1.5 rounded-full text-xs font-bold tracking-wider flex items-center transition-all shadow-lg mr-4 bg-orange-500 hover:bg-orange-600 text-white shadow-orange-900/50`}>
+                                <button onClick={handleRunDRC} className="px-6 py-1.5 rounded-full text-xs font-bold tracking-wider flex items-center transition-all shadow-lg mr-4 bg-orange-500 hover:bg-orange-600 text-white">
                                     <Activity size={14} className="mr-2"/> RUN DRC CHECK
                                 </button>
                             )}
-                            
+                             
                             <div className="flex bg-slate-900 rounded-md p-1 border border-slate-800">
-                                <button onClick={handleUndo} disabled={historyStep === 0} className={`p-1.5 rounded transition-colors ${historyStep > 0 ? 'hover:bg-slate-700 text-slate-300' : 'text-slate-700'}`} title="Undo (Ctrl+Z)"><Undo2 size={16} /></button>
-                                <button onClick={handleRedo} disabled={historyStep === history.length - 1} className={`p-1.5 rounded transition-colors ${historyStep < history.length - 1 ? 'hover:bg-slate-700 text-slate-300' : 'text-slate-700'}`} title="Redo (Ctrl+Y)"><Redo2 size={16} /></button>
+                                <button onClick={handleUndo} disabled={historyStep === 0} className={`p-1.5 rounded transition-colors ${historyStep > 0 ? 'hover:bg-slate-700 text-slate-300' : 'text-slate-600 cursor-not-allowed'}`}><Undo2 size={14} /></button>
+                                <button onClick={handleRedo} disabled={historyStep === history.length - 1} className={`p-1.5 rounded transition-colors ${historyStep < history.length - 1 ? 'hover:bg-slate-700 text-slate-300' : 'text-slate-600 cursor-not-allowed'}`}><Redo2 size={14} /></button>
                                 <div className="w-px h-4 bg-slate-700 mx-1"></div>
-                                <button onClick={handleDeleteSelection} disabled={selectedElementIds.size === 0} className={`p-1.5 rounded transition-colors ${selectedElementIds.size > 0 ? 'hover:bg-red-900/50 text-red-400' : 'text-slate-700'}`} title="Delete (Del)"><Trash2 size={16} /></button>
+                                <button onClick={handleDeleteSelection} disabled={selectedElementIds.size === 0} className={`p-1.5 rounded transition-colors ${selectedElementIds.size > 0 ? 'hover:bg-red-700/40 text-slate-300' : 'text-slate-600 cursor-not-allowed'}`}><Trash2 size={14} /></button>
                             </div>
 
-                            <div className="text-[11px] font-mono text-slate-500 bg-slate-900 px-3 py-1.5 rounded border border-slate-800 flex items-center space-x-3"><span>X: {mousePos.x}</span><span>Y: {mousePos.y}</span><div className="w-px h-3 bg-slate-700"></div><span>{(zoom * 100).toFixed(0)}%</span></div>
+                            <div className="text-[11px] font-mono text-slate-500 bg-slate-900 px-3 py-1.5 rounded border border-slate-800 flex items-center space-x-3"><span>X: {mousePos.x}</span><span>Y: {mousePos.y}</span></div>
 
                             <div className="flex bg-slate-900 rounded-md p-1 border border-slate-800">
-                                <button onClick={() => setRightPanelTab(rightPanelTab === 'inspector' ? 'closed' : 'inspector')} className={`p-1.5 rounded transition-colors ${rightPanelTab === 'inspector' ? 'bg-blue-600/20 text-blue-400' : 'text-slate-500 hover:bg-slate-800'}`} title="Inspector"><Settings2 size={18} /></button>
-                                <button onClick={() => setRightPanelTab(rightPanelTab === 'ai' ? 'closed' : 'ai')} className={`p-1.5 rounded transition-colors ${rightPanelTab === 'ai' ? 'bg-purple-600/20 text-purple-400' : 'text-slate-500 hover:bg-slate-800'}`} title="AI Assistant"><Sparkles size={18} /></button>
+                                <button onClick={() => setRightPanelTab(rightPanelTab === 'inspector' ? 'closed' : 'inspector')} className={`p-1.5 rounded transition-colors ${rightPanelTab === 'inspector' ? 'bg-slate-700 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white'}`}><Settings2 size={14} /></button>
+                                <button onClick={() => setRightPanelTab(rightPanelTab === 'ai' ? 'closed' : 'ai')} className={`p-1.5 rounded transition-colors ${rightPanelTab === 'ai' ? 'bg-purple-600 text-white' : 'text-slate-400 hover:bg-slate-700 hover:text-white'}`}><Sparkles size={14} /></button>
                             </div>
                         </div>
                     </div>
 
                     <div className="flex flex-1 overflow-hidden relative">
-                        {/* Toolbar */}
                         <div className={`absolute top-5 left-5 z-10 flex flex-col space-y-4 transition-opacity ${isSimulating ? 'opacity-30 pointer-events-none' : 'opacity-100'}`}>
                             <div className="bg-[#0a0a0c] border border-slate-800/80 rounded-xl p-1.5 shadow-2xl flex flex-col space-y-1">
                                 <ToolButton icon={MousePointer2} id="select" label="Select & Edit" />
                                 <ToolButton icon={Move} id="pan" label="Pan Canvas (Space+Drag)" />
                                 <div className="w-full h-px bg-slate-800 my-1"></div>
-                                {view === VIEWS.LAYOUT ? <ToolButton icon={Square} id="draw" label="Draw Layer Shape" /> : <button onClick={() => setTool('wire')} className={`p-2.5 rounded-lg flex items-center justify-center transition-all ${tool === 'wire' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-800'}`}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12h8"/><path d="M12 12v8"/><path d="M12 20h8"/></svg></button>}
+                                {view === VIEWS.LAYOUT ? <ToolButton icon={Square} id="draw" label="Draw Layer Shape" /> : <button onClick={() => setTool('wire')} className={`p-2.5 rounded-lg flex items-center justify-center transition-all ${tool === 'wire' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'}`}><Network size={16}/></button>}
                             </div>
                             
                             <div className="bg-[#0a0a0c] border border-slate-800/80 rounded-xl p-1.5 shadow-2xl flex flex-col space-y-1.5 w-32 max-h-[60vh] overflow-y-auto no-scrollbar">
@@ -629,43 +642,40 @@
                                     const isVisible = visibleLayers[layer.id];
                                     return (
                                         <div key={layer.id} className="flex items-center space-x-1 group">
-                                            <button onClick={() => setVisibleLayers(prev => ({...prev, [layer.id]: !prev[layer.id]}))} className={`p-1.5 rounded transition-colors ${isVisible ? 'text-slate-400 hover:text-slate-200' : 'text-slate-700'}`}>{isVisible ? <Eye size={14} /> : <EyeOff size={14} />}</button>
-                                            <button onClick={() => { setActiveLayerId(layer.id); setTool('draw'); }} className={`flex-1 flex items-center px-1.5 py-1.5 rounded text-[10px] font-bold tracking-wider truncate border ${isActive ? 'bg-slate-800 text-white border-slate-600' : 'border-transparent text-slate-400 hover:bg-slate-800/50'}`}><div className="w-2.5 h-2.5 rounded-sm mr-2 flex-shrink-0" style={{backgroundColor: layer.color, border: `1px solid ${layer.borderColor}`}}></div>{layer.name}</button>
+                                            <button onClick={() => setVisibleLayers(prev => ({...prev, [layer.id]: !prev[layer.id]}))} className={`p-1.5 rounded transition-colors ${isVisible ? 'text-slate-300 hover:bg-slate-700' : 'text-slate-500 hover:bg-slate-700'}`}><Eye size={12} /></button>
+                                            <button onClick={() => { setActiveLayerId(layer.id); setTool('draw'); }} className={`flex-1 flex items-center px-1.5 py-1.5 rounded text-[10px] font-bold transition-all ${isActive ? 'bg-blue-600 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}`}>
+                                                <span className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: layer.borderColor }}></span>{layer.name}
+                                            </button>
                                         </div>
                                     )
                                 }) : Object.keys(SCHEMATIC_COMPONENTS).filter(k=>k!=='WIRE').map(key => {
                                     const comp = SCHEMATIC_COMPONENTS[key];
                                     const isActive = tool === 'place' && activeComponentType === key;
-                                    return <button key={key} onClick={() => { setActiveComponentType(key); setTool('place'); }} className={`h-9 px-2 rounded flex items-center text-[10px] font-bold tracking-wider border ${isActive ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-800 border-transparent'}`}><div className="w-2 h-2 rounded-full mr-2" style={{backgroundColor: comp.color}}></div>{key}</button>
+                                    return <button key={key} onClick={() => { setActiveComponentType(key); setTool('place'); }} className={`h-9 px-2 rounded flex items-center text-[10px] font-bold transition-all ${isActive ? 'bg-blue-600 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}`}>
+                                        <span className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: comp.color }}></span>{comp.name}
+                                    </button>;
                                 })}
                             </div>
                         </div>
 
-                        {/* Top banner when simulating */}
                         {isSimulating && view === VIEWS.SCHEMATIC && (
-                            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 bg-green-900/80 border border-green-500 text-green-200 px-6 py-2 rounded-full text-sm font-semibold shadow-2xl backdrop-blur-sm animate-pulse">SIMULATION ACTIVE — Click the blue Input Switches to toggle power!</div>
+                            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 bg-green-900/80 border border-green-500 text-green-200 px-6 py-2 rounded-full text-sm font-semibold shadow-lg">Simulation running</div>
                         )}
 
-                        {/* Canvas */}
-                        <div ref={containerRef} className={`flex-1 relative outline-none ${tool === 'pan' || isPanning ? 'cursor-grab active:cursor-grabbing' : 'cursor-crosshair'}`}
-                            onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp}
-                            onContextMenu={(e) => { e.preventDefault(); setTool('select'); setCurrentElement(null); }} tabIndex={0}>
+                        <div ref={containerRef} className={`flex-1 relative outline-none ${tool === 'pan' || isPanning ? 'cursor-grab active:cursor-grabbing' : 'cursor-crosshair'}`} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp} onContextMenu={(e) => { e.preventDefault(); setTool('select'); setCurrentElement(null); }} tabIndex={0}>
                             <canvas ref={canvasRef} className="absolute top-0 left-0" />
                             {(tool === 'draw' || tool === 'place' || tool === 'wire') && !isPanning && !isSimulating && (
                                 <div className="pointer-events-none absolute inset-0 opacity-20"><div className="absolute w-px h-full bg-blue-400" style={{left: `${mousePos.x * zoom + pan.x}px`}}></div><div className="absolute h-px w-full bg-blue-400" style={{top: `${mousePos.y * zoom + pan.y}px`}}></div></div>
                             )}
                         </div>
 
-                        {/* RIGHT PROPERTIES & AI PANEL */}
                         {rightPanelTab !== 'closed' && (
                             <div className="w-[340px] bg-[#0a0a0c] border-l border-slate-800/80 flex flex-col shadow-2xl z-20 transition-all duration-300 h-full">
-                                
                                 <div className="flex border-b border-slate-800/80 bg-[#050505]">
-                                    <button onClick={() => setRightPanelTab('inspector')} className={`flex-1 py-3.5 text-xs font-semibold tracking-wide flex items-center justify-center transition-colors ${rightPanelTab === 'inspector' ? 'text-blue-400 border-b-2 border-blue-500 bg-slate-900/50' : 'text-slate-500 hover:text-slate-300'}`}><Settings2 size={14} className="mr-2" /> INSPECTOR</button>
-                                    <button onClick={() => setRightPanelTab('ai')} className={`flex-1 py-3.5 text-xs font-semibold tracking-wide flex items-center justify-center transition-colors ${rightPanelTab === 'ai' ? 'text-purple-400 border-b-2 border-purple-500 bg-slate-900/50' : 'text-slate-500 hover:text-slate-300'}`}><Sparkles size={14} className="mr-2" /> COPILOT</button>
+                                    <button onClick={() => setRightPanelTab('inspector')} className={`flex-1 py-3.5 text-xs font-semibold tracking-wide flex items-center justify-center transition-colors ${rightPanelTab === 'inspector' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/80'}`}>Inspector</button>
+                                    <button onClick={() => setRightPanelTab('ai')} className={`flex-1 py-3.5 text-xs font-semibold tracking-wide flex items-center justify-center transition-colors ${rightPanelTab === 'ai' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/80'}`}>Copilot</button>
                                 </div>
                                 
-                                {/* Inspector Tab */}
                                 {rightPanelTab === 'inspector' && (
                                     <div className="flex-1 p-5 overflow-y-auto no-scrollbar">
                                         {selectedElement ? (
@@ -674,12 +684,12 @@
                                                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-2">Identification</span>
                                                     <div className="space-y-3">
                                                         <div className="flex items-center space-x-2">
-                                                            <div className="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs text-slate-300 font-bold tracking-wider">{selectedElement.layerId ? LAYERS.find(l=>l.id === selectedElement.layerId)?.name.toUpperCase() : selectedElement.type}</div>
+                                                            <div className="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs text-slate-300 font-bold tracking-wider">{selectedElement.type || selectedElement.layerId || 'Element'}</div>
                                                             <span className="text-xs text-slate-500 font-mono">ID: {selectedElement.id}</span>
                                                         </div>
                                                         <div>
                                                             <label className="text-[11px] text-slate-400 mb-1.5 block font-medium">Element Name / Net Label</label>
-                                                            <input type="text" value={selectedElement.name || ''} onChange={(e) => updateSelectedElement({name: e.target.value})} className="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded px-3 py-2 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-mono" placeholder="e.g., U1_AND, VDD_NET" />
+                                                            <input type="text" value={selectedElement.name || ''} onChange={(e) => updateSelectedElement({name: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-slate-200 outline-none focus:border-blue-500" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -693,7 +703,7 @@
                                                                     <div key={attr}>
                                                                         <label className="text-[10px] text-slate-400 mb-1 block uppercase tracking-wider">{attr}</label>
                                                                         <div className="flex bg-slate-900 border border-slate-700 rounded overflow-hidden">
-                                                                            <input type="number" value={selectedElement[attr]} onChange={(e) => updateSelectedElement({[attr]: e.target.value})} className="w-full bg-transparent text-sm px-2.5 py-1.5 text-slate-200 font-mono focus:outline-none" />
+                                                                            <input type="number" value={selectedElement[attr]} onChange={(e) => updateSelectedElement({[attr]: e.target.value})} className="w-full bg-transparent px-2 py-1.5 text-xs text-slate-200 outline-none" />
                                                                         </div>
                                                                     </div>
                                                                 ))}
@@ -703,7 +713,7 @@
                                                         {view === VIEWS.LAYOUT && (
                                                             <div>
                                                                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-3 border-b border-slate-800 pb-1.5">Layer Assignment</span>
-                                                                <select value={selectedElement.layerId} onChange={(e) => updateSelectedElement({layerId: e.target.value})} className="w-full bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded px-3 py-2 focus:outline-none focus:border-blue-500 appearance-none font-semibold tracking-wide">
+                                                                <select value={selectedElement.layerId} onChange={(e) => updateSelectedElement({layerId: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm text-slate-200 outline-none focus:border-blue-500">
                                                                     {LAYERS.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
                                                                 </select>
                                                             </div>
@@ -712,54 +722,57 @@
                                                 )}
                                                 {selectedElement.type === 'WIRE' && (
                                                     <div>
-                                                         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-3 border-b border-slate-800 pb-1.5">Net Route Details</span>
-                                                         <p className="text-xs text-slate-400 font-mono bg-slate-900 p-2 rounded border border-slate-800">Nodes: {selectedElement.points.length}</p>
+                                                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-3 border-b border-slate-800 pb-1.5">Net Route Details</span>
+                                                        <p className="text-xs text-slate-400 font-mono bg-slate-900 p-2 rounded border border-slate-800">Nodes: {selectedElement.points.length}</p>
                                                     </div>
                                                 )}
                                             </div>
                                         ) : (
                                             <div className="flex flex-col items-center justify-center h-full text-center text-slate-500 space-y-4 pb-20">
                                                 <div className="w-16 h-16 rounded-full bg-slate-800/50 flex items-center justify-center shadow-inner"><Crosshair size={24} className="text-slate-600" /></div>
-                                                <div><p className="text-sm font-semibold text-slate-300 mb-1 tracking-wide">No Element Selected</p><p className="text-[11px] max-w-[200px] mx-auto text-slate-500">Click a polygon, gate, or net in the workspace to edit properties.</p></div>
+                                                <div><p className="text-sm font-semibold text-slate-300 mb-1 tracking-wide">No Element Selected</p><p className="text-[11px] max-w-[200px] mx-auto text-slate-500">Click an object on the canvas to inspect or edit it.</p></div>
                                             </div>
                                         )}
                                     </div>
                                 )}
 
-                                {/* Copilot Tab */}
                                 {rightPanelTab === 'ai' && (
                                     <div className="flex-1 flex flex-col overflow-hidden bg-[#050505]">
                                         <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar">
                                             {chatHistory.map((msg, idx) => (
                                                 <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                                                     <div className={`flex items-start max-w-[90%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                                                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm ${msg.role === 'user' ? 'bg-blue-600 text-white ml-2' : 'bg-purple-600 text-white mr-2'}`}>{msg.role === 'user' ? <User size={14} /> : <Sparkles size={14} />}</div>
-                                                        <div className={`px-3.5 py-2.5 rounded-xl text-[13px] leading-relaxed ${msg.role === 'user' ? 'bg-blue-600/10 border border-blue-500/20 text-blue-100 rounded-tr-sm' : 'bg-slate-900 border border-slate-700 text-slate-200 rounded-tl-sm shadow-sm'}`}>{msg.text}</div>
+                                                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm ${msg.role === 'user' ? 'bg-blue-600 text-white ml-2' : 'bg-purple-600/30 text-purple-400 mr-2'}`}>
+                                                            {msg.role === 'user' ? 'U' : <Sparkles size={14} />}
+                                                        </div>
+                                                        <div className={`px-3.5 py-2.5 rounded-xl text-[13px] leading-relaxed ${msg.role === 'user' ? 'bg-blue-600/10 border border-blue-500/20 text-blue-200' : 'bg-slate-900 border border-slate-700 text-slate-300'}`}>
+                                                            {msg.text}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             ))}
                                             {isAILoading && (
                                                 <div className="flex justify-start">
                                                     <div className="flex items-start">
-                                                         <div className="w-7 h-7 rounded-lg bg-purple-600/30 text-purple-400 mr-2 flex items-center justify-center"><Sparkles size={14} /></div>
-                                                         <div className="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 rounded-tl-sm flex items-center space-x-2"><Loader2 size={14} className="animate-spin" /><span className="text-xs font-medium tracking-wide">Processing query...</span></div>
+                                                        <div className="w-7 h-7 rounded-lg bg-purple-600/30 text-purple-400 mr-2 flex items-center justify-center"><Sparkles size={14} /></div>
+                                                        <div className="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 rounded-tl-sm flex items-center space-x-2"><Loader2 size={14} className="animate-spin" /> <span>Thinking…</span></div>
                                                     </div>
                                                 </div>
                                             )}
                                         </div>
                                         
                                         <div className="px-4 py-3 border-t border-slate-800/80 flex space-x-2 bg-[#0a0a0c]">
-                                            <button onClick={handleAnalyzeDesign} disabled={isAILoading} className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold tracking-wide py-2 rounded-lg border border-slate-700 transition-colors flex items-center justify-center shadow-sm"><Eye size={14} className="mr-2" /> ANALYZE DESIGN</button>
+                                            <button onClick={handleAnalyzeDesign} disabled={isAILoading} className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold tracking-wide py-2 rounded-md transition-colors disabled:opacity-50">Analyze Current Design</button>
                                         </div>
 
                                         <div className="p-4 bg-[#0a0a0c] border-t border-slate-800/80">
                                             <form onSubmit={handleChatSubmit} className="flex flex-col space-y-3">
                                                 <div className="flex items-center space-x-2">
-                                                    <input type="text" value={chatInput} onChange={(e) => setChatInput(e.target.value)} placeholder={view === VIEWS.SCHEMATIC ? "E.g. Generate a half adder..." : "Ask a layout rule..."} className="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 shadow-inner" />
-                                                    <button type="submit" disabled={isAILoading || !chatInput.trim()} className="p-2.5 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white rounded-lg transition-colors shadow-md"><Send size={16} /></button>
+                                                    <input type="text" value={chatInput} onChange={(e) => setChatInput(e.target.value)} placeholder={view === VIEWS.SCHEMATIC ? "E.g. Generate a half adder" : "Ask about your layout"} className="flex-1 bg-slate-900 border border-slate-700 rounded-md px-3 py-2 text-sm text-slate-200 placeholder-slate-500 outline-none focus:border-blue-500" />
+                                                    <button type="submit" disabled={isAILoading || !chatInput.trim()} className="p-2.5 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white rounded-md"><Send size={14} /></button>
                                                 </div>
                                                 {view === VIEWS.SCHEMATIC && (
-                                                    <button type="button" onClick={handleGenerateCircuit} disabled={isAILoading || !chatInput.trim()} className="w-full py-2 text-xs font-bold tracking-wider bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/30 rounded-lg transition-colors flex items-center justify-center disabled:opacity-50"><Cpu size={14} className="mr-2" /> AUTO-GENERATE CIRCUIT</button>
+                                                    <button type="button" onClick={handleGenerateCircuit} disabled={isAILoading || !chatInput.trim()} className="w-full py-2 text-xs font-bold tracking-[0.16em] text-purple-100 bg-purple-600/90 hover:bg-purple-500 disabled:opacity-50 rounded-md transition-colors">GENERATE CIRCUIT</button>
                                                 )}
                                             </form>
                                         </div>
